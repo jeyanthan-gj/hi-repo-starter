@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF‑8" />
+  <meta name="viewport" content="width=device‑width, initial‑scale=1.0" />
+  <title>Responsive Nav (video style)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; }
+    nav {
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      position: relative;
+    }
+    .logo {
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* Hide native checkbox */
+    #toggle {
+      display: none;
+    }
+
+    /* Hamburger icon */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: #fff;
+      margin: 4px 0;
+      transition: 0.3s;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+    .nav-links li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.5rem;
+      transition: color 0.3s;
+    }
+    .nav-links li a:hover {
+      color: #ffcc00;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+      .nav-links {
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #333;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+      #toggle:checked + .hamburger + .nav-links {
+        max-height: 300px; /* adjust depending on # of items */
+      }
+      .nav-links li {
+        text-align: center;
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#" class="logo">MySite</a>
+
+    <input type="checkbox" id="toggle" />
+
+    <label for="toggle" class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+</body>
+</html>

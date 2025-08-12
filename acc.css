@@ -1,0 +1,129 @@
+/* Reset some default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and General Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    padding-top: 60px; /* To prevent content from being hidden under the fixed navbar */
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.navbar a.logo {
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.search-bar {
+    padding: 8px;
+    width: 300px;
+    border: none;
+    border-radius: 4px;
+}
+
+.nav-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-btn:hover {
+    background-color: #45a049;
+}
+
+/* Products Container */
+.products-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for smaller screen sizes */
+    justify-content: space-between;
+    margin: 100px 20px; /* Adjusted margin to accommodate fixed navbar */
+    text-align: center;
+}
+
+/* Product Item */
+.product-item {
+    width: 30%; /* Ensure 3 items per row */
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Ensure the logo image fills the box */
+.product-item img {
+    width: 100%;
+    height: 200px; /* Set a fixed height for all images */
+    object-fit: cover; /* Ensures images maintain aspect ratio while filling the space */
+    border-bottom: 1px solid #ddd;
+    border-radius: 5px 5px 0 0;
+}
+
+/* Product Title/Text */
+.product-item p {
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    text-align: center; /* Center the text inside the box */
+    word-wrap: break-word; /* Ensure text wraps correctly if it's too long */
+}
+
+/* Hover Effect for Product Items */
+.product-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Link styling inside product items */
+.product-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .product-item {
+        width: 48%; /* Adjust product item size for tablets (2 per row) */
+    }
+}
+
+@media (max-width: 480px) {
+    .product-item {
+        width: 100%; /* Stack product items on very small screens */
+    }
+
+    .navbar a.logo {
+        font-size: 20px; /* Smaller logo on mobile */
+    }
+}

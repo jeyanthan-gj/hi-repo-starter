@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jayam Mobile</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!-- Responsive -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Favicon -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+</head>
+<body>
+    
+    <style>
+        /* Reset some default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            padding-top: 60px; /* To prevent content from being hidden under the fixed navbar */
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo-img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .search-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            position: relative;
+        }
+        .search-bar {
+            width: 100%;
+            height: 40px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f4f4f4;
+            font-size: 16px; /* Ensure text is readable */
+        }
+
+        /* Search Results Container */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%; /* Ensure the width is 100% */
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            overflow: hidden; /* Ensures content does not overflow the box */
+        }
+
+        /* Individual Search Result Item */
+        .search-results .search-result-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd; /* Adds a border between items */
+            width: 100%; /* Ensures items take up the full width */
+            display: flex; /* Use flexbox to align items */
+            align-items: center; /* Center-align items vertically */
+        }
+
+        .search-results .search-result-item:last-child {
+            border-bottom: none; /* Removes border from the last item */
+        }
+
+        /* Image within Search Result Item */
+        .search-results .search-result-item img {
+            max-width: 50px; /* Restrict the maximum width */
+            max-height: 50px; /* Restrict the maximum height */
+            margin-right: 10px; /* Add some space between image and text */
+        }
+
+        /* Text within Search Result Item */
+        .search-results .search-result-item span {
+            flex-grow: 1; /* Make the text span take up remaining space */
+            font-size: 16px; /* Adjust text size */
+            color: #333; /* Text color */
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .nav-btn {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-left: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 16px; /* Ensure text is readable */
+        }
+        .nav-btn:hover {
+            background-color: #777;
+        }
+        /* Remove green outline on focus */
+        .search-bar:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        .social-links {
+            margin-top: 10px;
+        }
+
+        .map-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .map-container iframe {
+            border: 0;
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 100px;
+            }
+
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-container {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px; /* Add margin for spacing */
+            }
+            .nav-btn {
+                width: 30%; /* Adjust button width */
+                margin: 5px 0; /* Add margin for spacing */
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 110px;
+            }
+
+            .navbar {
+                padding: 8px;
+            }
+            .logo-img {
+                height: 35px; /* Smaller on very small screens */
+            }
+            .search-container {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+                font-size: 14px; /* Slightly smaller font for small screens */
+            }
+            .navbar a.logo {
+                font-size: 20px; /* Smaller logo on mobile */
+            }
+            
+
+            .map-container iframe {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="logos/logo.jpeg" alt="Jayam Mobile Logo" class="logo-img">
+        </a>
+        <div class="search-container">
+            <input type="text" id="myInput" class="search-bar" placeholder="Search...">
+            <div id="searchResult" class="search-results" style="display: none;"></div>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="window.location.href='products.html'">Products</button>
+            <button class="nav-btn" onclick="window.location.href='showroom.php'">Gallery</button>
+            <button class="nav-btn" onclick="window.location.href='about.html'">About Us</button>
+        </div>
+    </nav>
+    <script>
+        $(document).ready(function(){
+            $("#myInput").on("keyup", function() {
+                var inputVal = $(this).val();
+                if(inputVal.length){
+                    $.get("livesearch.php?input="+inputVal, function(data){
+                        $("#searchResult").html(data);
+                        $("#searchResult").show();
+                    });
+                } else{
+                    $("#searchResult").hide();
+                }
+            });
+        });
+    </script>
+
+    <!-- banner section start -->
+    <div class="banner_section layout_padding" style="background-color: #f4f4f4; padding: 20px 0;">
+        <div class="container">
+           <div id="main_slider" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                 <div class="carousel-item active">
+                    <div class="row">
+                       <div class="col-sm-12">
+                          <div class="banner_taital" style="text-align: left; margin-left: 0;">
+                             <h1 class="outstanding_text" style="font-family: 'Arial', sans-serif; color: #800000;">NO:1</h1>
+                             <h1 class="coffee_text" style="font-family: 'Arial', sans-serif; color: #800000;">Smartphone Showroom</h1>
+                             <p class="there_text" style="font-family: 'Arial', sans-serif; color: #800000;">We are committed to bringing you the latest mobile phones and<br>
+                                accessories, offering exceptional quality at competitive prices. <br>For over a
+                                decade, we’ve proudly served the Anjugramam <br>community.</p>
+                             <div class="learnmore_bt"><a href="products.html" style="font-family: 'Arial', sans-serif; color: #fff; background-color: #007bff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Learn More</a></div>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+             
+           </div>
+        </div>
+     </div>
+     <!-- banner section end -->
+
+    <!-- About Section Start -->
+    <div class="about_section layout_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="about_taital">About Us</div>
+                    <p class="about_text">We offer the latest mobile devices and accessories.</p>
+                    <p class="about_text">Our mission is to provide quality products and exceptional service.</p>
+                    <div class="read_bt"><a href="about.html">Read More</a></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="about_img"><img src="images/about-img.jpg" alt="About Jayam Mobile"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About Section End -->
+
+    <!-- Gallery Section Start -->
+    <div class="gallery_section layout_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="gallery_taital">Our Gallery</h1>
+                    <p class="gallery_text">Check out our latest mobile products and accessories.</p>
+                </div>
+            </div>
+            <div class="gallery_section_2">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="container_main">
+                            <img src="images/img-1.jpg" alt="Mobile Product 1" class="image">
+                            <div class="overlay">
+                                <div class="text"><a href="mobiles.php"><i class="fa fa-search" aria-hidden="true"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="container_main">
+                            <img src="images/img-2.jpg" alt="Mobile Product 2" class="image">
+                            <div class="overlay">
+                                <div class="text"><a href="accessories.php"><i class="fa fa-search" aria-hidden="true"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="container_main">
+                            <img src="images/img-3.jpg" alt="Mobile Product 3" class="image">
+                            <div class="overlay">
+                                <div class="text"><a href="service.html"><i class="fa fa-search" aria-hidden="true"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="seemore_bt"><a href="products.html">See More</a></div>
+        </div>
+    </div>
+    <!-- Gallery Section End -->
+
+    <!-- Services Section Start -->
+    <div class="services_section layout_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="services_taital">Services</h1>
+                    <p class="services_text">We provide a range of services to enhance your mobile experience.</p>
+                </div>
+            </div>
+            <div class="services_section_2">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-12 col-md-4">
+                        <div class="box_main active">
+                            <div class="house_icon">
+                                <img src="images/icon1.png" class="image_1" alt="Service 1">
+                            </div>
+                            <h3 class="decorate_text">Mobile Repair</h3>
+                            <p class="tation_text">Expert repair services for all mobile devices.</p>
+                            <div class="readmore_bt"><a href="service.html">Read More</a></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-12 col-md-4">
+                        <div class="box_main">
+                            <div class="house_icon">
+                                <img src="images/icon2.png" class="image_1" alt="Service 2">
+                            </div>
+                            <h3 class="decorate_text">Accessories</h3>
+                            <p class="tation_text">A wide range of mobile accessories available.</p>
+                            <div class="readmore_bt"><a href="accessories.php">Read More</a></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-12 col-md-4">
+                        <div class="box_main">
+                            <div class="house_icon">
+                                <img src="images/icon3.png" class="image_1" alt="Service 3">
+                            </div>
+                            <h3 class="decorate_text">Consultation</h3>
+                            <p class="tation_text">Get expert advice on mobile purchases.</p>
+                            <div class="readmore_bt"><a href="#contact">Read More</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Services Section End -->
+
+    <div class="contact_section layout_padding" style="padding-left: 0; margin-left: 0; width: 100%;">
+        <div class="container" style="padding-left: 0; margin-left: 0; width: 100%;">
+            <h1 class="contact_text" style="text-align: left; margin-left: 0;">Contact Us</h1>
+        </div>
+    </div>
+    
+    <div class="contact_section_2 layout_padding" style="padding-left: 0; margin-left: 0; width: 100%; display: flex;">
+        <div class="container-fluid" style="padding-left: 0; margin-left: 0; width: 100%; display: flex; justify-content: flex-start;">
+            <div class="row" style="width: 100%; padding-left: 0; margin-left: 0; flex-grow: 1;">
+                <div class="col-md-6 padding_0" style="padding-left: 0; margin-left: 0; display: flex; flex-direction: column;">
+                    <div class="mail_section" style="flex-grow: 1;">
+                        <div class="email_text">
+                            <form id="contactForm" onsubmit="sendWhatsAppMessage(event)" style="width: 100%; max-width: 600px; padding-left: 0; margin-left: 0;">
+                                <div class="form-group">
+                                    <input type="text" class="email-bt" placeholder="Name" name="Name" required style="width: 100%; margin-bottom: 10px;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="email-bt" placeholder="Address" name="Address" required style="width: 100%; margin-bottom: 10px;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="email-bt" placeholder="Mobile Number" name="Mobile" required style="width: 100%; margin-bottom: 10px;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="email-bt" placeholder="Email" name="Email" required style="width: 100%; margin-bottom: 10px;">
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="massage-bt" placeholder="Description" rows="5" name="Description" required style="width: 100%; margin-bottom: 10px;"></textarea>
+                                </div>
+                                <div class="send_btn">
+                                    <button type="submit" class="main_bt" style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; text-align: center; cursor: pointer;">Send Message</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 padding_0" style="padding-left: 0; margin-left: 0; display: flex; flex-direction: column;">
+                    <div class="map-responsive" style="flex-grow: 1; width: 100%;">
+                        <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d627.7993284763948!2d77.5712742!3d8.148947!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b048d2fbced32a1%3A0x5aa44170a82f104d!2sJAYAM%20MOBILES!5e0!3m2!1sen!2sin!4v1700000000000" 
+    width="100%" 
+    height="450" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy">
+</iframe>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    function sendWhatsAppMessage(event) {
+        event.preventDefault();
+        
+        const form = document.getElementById('contactForm');
+        const formData = new FormData(form);
+        const name = formData.get('Name');
+        const address = formData.get('Address');
+        const mobile = formData.get('Mobile');
+        const email = formData.get('Email');
+        const description = formData.get('Description');
+    
+        const message = `Name: ${name}\nAddress: ${address}\nMobile Number: ${mobile}\nEmail: ${email}\nDescription: ${description}`;
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/918667200485?text=${encodedMessage}`;
+    
+        window.open(whatsappUrl, '_blank');
+    }
+    </script>
+
+
+    
+    
+
+    
+
+    <!-- Javascript files -->
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery-3.0.0.min.js"></script>
+<script src="js/plugin.js"></script>
+<script src="js/custom.js"></script>
+
+<style>
+    body {
+        min-height: 100vh; /* Ensure the body takes at least the full viewport height */
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+    }
+    main {
+        flex: 1; /* This will push the footer to the bottom */
+    }
+</style>
+
+
+    
+    <footer style="position: relative; width: 100%; background-color: #f1f1f1; text-align: center; padding: 10px 0; box-shadow: 0 -1px 5px rgba(0,0,0,0.1);">
+        <a href="https://www.facebook.com/jayammobileanjugramam" target="_blank" aria-label="Facebook" style="margin: 0 10px; text-decoration: none; color: #3b5998;">Facebook</a>
+        <a href="https://www.instagram.com/jayammobiles_anjugramam/" target="_blank" aria-label="Instagram" style="margin: 0 10px; text-decoration: none; color: #E1306C;">Instagram</a>
+        <a href="https://wa.me/918667200485" target="_blank" aria-label="Whatsapp" style="margin: 0 10px; text-decoration: none; color: #25D366;">Whatsapp</a>
+        <p style="margin: 10px 0 0; color: #333;">&copy; 2023 Jayam Mobiles. All rights reserved.</p>
+    </footer>
+</body>
+</html>

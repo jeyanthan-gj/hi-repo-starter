@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>About Us - Jayam Mobile</title>
+    
+    <link rel="stylesheet" href="about.css"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="logos/logo.jpeg" alt="Jayam Mobile Logo" class="logo-img">
+        </a>
+        <div class="search-container">
+            <input type="text" id="myInput" class="search-bar" placeholder="Search...">
+            <div id="searchResult" class="search-results" style="display: none;"></div>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="window.location.href='products.html'">Products</button>
+            <button class="nav-btn" onclick="window.location.href='showroom.php'">Gallery</button>
+            <button class="nav-btn" onclick="window.location.href='about.html'">About Us</button>
+        </div>
+    </nav>
+    <script>
+        $(document).ready(function(){
+            $("#myInput").on("keyup", function() {
+                var inputVal = $(this).val();
+                if(inputVal.length){
+                    $.get("livesearch.php?input="+inputVal, function(data){
+                        $("#searchResult").html(data);
+                        $("#searchResult").show();
+                    });
+                } else{
+                    $("#searchResult").hide();
+                }
+            });
+        });
+    </script>
+    <style>
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo-img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .search-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            position: relative;
+        }
+        .search-bar {
+            width: 100%;
+            height: 40px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f4f4f4;
+            font-size: 16px; /* Ensure text is readable */
+        }
+        /* Search Results Container */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%; /* Ensure the width is 100% */
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            overflow: hidden; /* Ensures content does not overflow the box */
+        }
+
+        /* Individual Search Result Item */
+        .search-results .search-result-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd; /* Adds a border between items */
+            width: 100%; /* Ensures items take up the full width */
+            display: flex; /* Use flexbox to align items */
+            align-items: center; /* Center-align items vertically */
+        }
+
+        .search-results .search-result-item:last-child {
+            border-bottom: none; /* Removes border from the last item */
+        }
+
+        /* Image within Search Result Item */
+        .search-results .search-result-item img {
+            max-width: 50px; /* Restrict the maximum width */
+            max-height: 50px; /* Restrict the maximum height */
+            margin-right: 10px; /* Add some space between image and text */
+            flex-shrink: 0; /* Prevent the image from shrinking */
+        }
+
+        /* Text within Search Result Item */
+        .search-results .search-result-item span {
+            flex-grow: 1; /* Make the text span take up remaining space */
+            font-size: 16px; /* Adjust text size */
+            color: #333; /* Text color */
+            white-space: nowrap; /* Prevent text from wrapping */
+            overflow: hidden; /* Hide overflow text */
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .nav-btn {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-left: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 16px; /* Ensure text is readable */
+        }
+        .nav-btn:hover {
+            background-color: #777;
+        }
+        /* Remove green outline on focus */
+        .search-bar:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 100px; /* Adjusted for medium-sized screens */
+            }
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-container {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px; /* Add margin for spacing */
+            }
+            .nav-btn {
+                width: 30%; /* Adjust button width */
+                margin: 5px 0; /* Add margin for spacing */
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding-top: 110px; /* Adjusted for very small screens */
+            }
+            .navbar {
+                padding: 8px;
+            }
+            .logo-img {
+                height: 35px; /* Smaller on very small screens */
+            }
+            .search-container {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+                font-size: 14px; /* Slightly smaller font for small screens */
+            }
+            .navbar a.logo {
+                font-size: 20px; /* Smaller logo on mobile */
+            }
+        }
+    </style>
+
+    <!-- About Us Section -->
+    <main>
+        <section id="about" class="section">
+            <h1>Welcome to Jayam Mobiles – Your Trusted Mobile Destination!</h1>
+            <p>At Jayam Mobiles, we are committed to bringing you the latest mobile phones and accessories, offering exceptional quality at competitive prices. For over a decade, we’ve proudly served the Anjugramam community, ensuring that every customer finds the perfect mobile device to fit their needs.</p>
+
+            <h2>Our Mission</h2>
+            <p>Our goal is to provide you with top-of-the-line smartphones and accessories from the best brands, combined with outstanding customer service. Whether you’re buying your first phone or upgrading to the newest model, we ensure a seamless, hassle-free shopping experience that leaves you completely satisfied.</p>
+
+            <h2>Our Vision</h2>
+            <p>We aspire to become the leading mobile retailer in Kanyakumari, known for our diverse selection, affordable pricing, and unwavering commitment to customer satisfaction. Our focus is on delivering not just products, but an experience that exceeds your expectations.</p>
+
+            <h2>Why Choose Jayam Mobiles?</h2>
+            <ul>
+                <li>Wide Range of Smartphones: From premium brands to affordable options, we offer a diverse selection.</li>
+                <li>Competitive Prices: Get the best deals and exclusive offers that make your purchase even more rewarding.</li>
+                <li>Expert Advice: Our knowledgeable staff is here to help you make the right choice for your needs.</li>
+                <li>Warranty & After-Sales Service: Enjoy peace of mind with our reliable warranty and customer support.</li>
+            </ul>
+
+            <h2>Contact Us</h2>
+            <p>If you have any questions or need more information, don't hesitate to reach out to us:</p>
+            <ul>
+                <li>Phone: <a href="tel:+911234567890">+91 123 456 7890</a></li>
+                <li>Email: <a href="mailto:contact@jayammobile.com">contact@jayammobile.com</a></li>
+                <li>Address: North Bazaar, Anjugramam, Kanyakumari, Tamil Nadu</li>
+            </ul>
+            <p>Visit us today and experience the Jayam Mobiles difference!</p>
+        </section>
+    </main>
+
+    
+
+    <!-- Footer -->
+    <style>
+        body {
+            min-height: 100vh; /* Ensure the body takes at least the full viewport height */
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+        main {
+            flex: 1; /* This will push the footer to the bottom */
+        }
+    </style>
+    
+    
+        
+        <footer style="position: relative; width: 100%; background-color: #f1f1f1; text-align: center; padding: 10px 0; box-shadow: 0 -1px 5px rgba(0,0,0,0.1);">
+            <a href="https://www.facebook.com/jayammobileanjugramam" target="_blank" aria-label="Facebook" style="margin: 0 10px; text-decoration: none; color: #3b5998;">Facebook</a>
+            <a href="https://www.instagram.com/jayammobiles_anjugramam/" target="_blank" aria-label="Instagram" style="margin: 0 10px; text-decoration: none; color: #E1306C;">Instagram</a>
+            <a href="https://wa.me/918667200485" target="_blank" aria-label="Whatsapp" style="margin: 0 10px; text-decoration: none; color: #25D366;">Whatsapp</a>
+            <p style="margin: 10px 0 0; color: #333;">&copy; 2023 Jayam Mobiles. All rights reserved.</p>
+        </footer>
+
+
+    
+
+    <script src="script.js"></script> <!-- Link to external JS file -->
+</body>
+</html>
