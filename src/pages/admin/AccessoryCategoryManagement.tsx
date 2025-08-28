@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, Upload } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -13,6 +13,7 @@ interface Category {
   name: string;
   description: string | null;
   icon: string | null;
+  image_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -25,8 +26,11 @@ const AccessoryCategoryManagement = () => {
   const [newCategory, setNewCategory] = useState({
     name: '',
     description: '',
-    icon: ''
+    icon: '',
+    image_url: ''
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [editImageFile, setEditImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -53,6 +57,20 @@ const AccessoryCategoryManagement = () => {
     }
   };
 
+  const uploadImage = async (file: File, path: string) => {
+    const { data, error } = await supabase.storage
+      .from('accessory-images')
+      .upload(path, file);
+    
+    if (error) throw error;
+    
+    const { data: { publicUrl } } = supabase.storage
+      .from('accessory-images')
+      .getPublicUrl(data.path);
+    
+    return publicUrl;
+  };
+
   const handleCreate = async () => {
     if (!newCategory.name.trim()) {
       toast({
@@ -64,12 +82,20 @@ const AccessoryCategoryManagement = () => {
     }
 
     try {
+      let imageUrl = newCategory.image_url;
+      
+      if (imageFile) {
+        const fileName = `category-${Date.now()}-${imageFile.name}`;
+        imageUrl = await uploadImage(imageFile, fileName);
+      }
+
       const { error } = await supabase
         .from('accessory_categories')
         .insert([{
           name: newCategory.name.trim(),
           description: newCategory.description.trim() || null,
           icon: newCategory.icon.trim() || null,
+          image_url: imageUrl,
         }]);
 
       if (error) throw error;
@@ -79,7 +105,8 @@ const AccessoryCategoryManagement = () => {
         description: "Category created successfully",
       });
 
-      setNewCategory({ name: '', description: '', icon: '' });
+      setNewCategory({ name: '', description: '', icon: '', image_url: '' });
+      setImageFile(null);
       fetchCategories();
     } catch (error) {
       console.error('Error creating category:', error);
@@ -107,12 +134,20 @@ const AccessoryCategoryManagement = () => {
     }
 
     try {
+      let imageUrl = editingCategory.image_url;
+      
+      if (editImageFile) {
+        const fileName = `category-${Date.now()}-${editImageFile.name}`;
+        imageUrl = await uploadImage(editImageFile, fileName);
+      }
+
       const { error } = await supabase
         .from('accessory_categories')
         .update({
           name: editingCategory.name.trim(),
           description: editingCategory.description?.trim() || null,
           icon: editingCategory.icon?.trim() || null,
+          image_url: imageUrl,
         })
         .eq('id', editingId);
 
@@ -125,6 +160,7 @@ const AccessoryCategoryManagement = () => {
 
       setEditingId(null);
       setEditingCategory({});
+      setEditImageFile(null);
       fetchCategories();
     } catch (error) {
       console.error('Error updating category:', error);
@@ -168,6 +204,7 @@ const AccessoryCategoryManagement = () => {
   const handleCancelEdit = () => {
     setEditingId(null);
     setEditingCategory({});
+    setEditImageFile(null);
   };
 
   return (
@@ -186,7 +223,7 @@ const AccessoryCategoryManagement = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Input
                 placeholder="Category name"
                 value={newCategory.name}
@@ -197,16 +234,49 @@ const AccessoryCategoryManagement = () => {
                 value={newCategory.icon}
                 onChange={(e) => setNewCategory({ ...newCategory, icon: e.target.value })}
               />
+              <div className="flex gap-2">
+                <input
+                  type="file"
+                  id="new-category-image"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => document.getElementById('new-category-image')?.click()}
+                  className="flex-1"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  {imageFile ? 'Change' : 'Upload'} Image
+                </Button>
+              </div>
               <Button onClick={handleCreate} className="btn-3d">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Category
               </Button>
             </div>
-            <Textarea
-              placeholder="Description (optional)"
-              value={newCategory.description}
-              onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-            />
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Description (optional)"
+                value={newCategory.description}
+                onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+              />
+              {imageFile && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span>Selected: {imageFile.name}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setImageFile(null)}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
 
@@ -225,19 +295,54 @@ const AccessoryCategoryManagement = () => {
                 <p>No categories found. Create your first category above.</p>
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Icon</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {categories.map((category) => (
-                    <TableRow key={category.id}>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Image</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Icon</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {categories.map((category) => (
+                      <TableRow key={category.id}>
+                        <TableCell>
+                          {editingId === category.id ? (
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="file"
+                                id={`edit-category-image-${category.id}`}
+                                accept="image/*"
+                                onChange={(e) => setEditImageFile(e.target.files?.[0] || null)}
+                                className="hidden"
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => document.getElementById(`edit-category-image-${category.id}`)?.click()}
+                              >
+                                <Upload className="w-3 h-3" />
+                              </Button>
+                              {editImageFile && (
+                                <span className="text-xs text-muted-foreground">{editImageFile.name}</span>
+                              )}
+                            </div>
+                          ) : category.image_url ? (
+                            <img
+                              src={category.image_url}
+                              alt={category.name}
+                              className="w-10 h-10 object-cover rounded-md"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center">
+                              <span className="text-xs text-muted-foreground">No image</span>
+                            </div>
+                          )}
+                        </TableCell>
                       <TableCell>
                         {editingId === category.id ? (
                           <Input
