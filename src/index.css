@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modern 3D Mobile Store Design System */
+
+@layer base {
+  :root {
+    /* Core Brand Colors - Mobile Tech Theme */
+    --background: 220 20% 4%;
+    --foreground: 220 15% 95%;
+
+    --card: 220 15% 8%;
+    --card-foreground: 220 15% 95%;
+
+    --popover: 220 15% 8%;
+    --popover-foreground: 220 15% 95%;
+
+    /* Primary - Electric Blue Tech */
+    --primary: 210 100% 60%;
+    --primary-foreground: 220 20% 4%;
+    --primary-glow: 210 100% 70%;
+
+    /* Secondary - Deep Purple */
+    --secondary: 270 60% 40%;
+    --secondary-foreground: 220 15% 95%;
+
+    /* Accent - Neon Green */
+    --accent: 140 80% 50%;
+    --accent-foreground: 220 20% 4%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 10% 60%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 220 15% 95%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 15%;
+    --ring: 210 100% 60%;
+
+    --radius: 1rem;
+
+    /* Advanced 3D & Animation Properties */
+    --glass-bg: 220 15% 8% / 0.1;
+    --glass-border: 220 15% 25% / 0.2;
+    --shadow-3d: 0 20px 40px hsl(220 20% 0% / 0.4);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
+    --shadow-hover: 0 30px 60px hsl(220 20% 0% / 0.6);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(270 60% 60%));
+    --gradient-hero: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(220 15% 6%) 50%, 
+      hsl(var(--background)) 100%);
+    --gradient-card: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(220 15% 10%) 100%);
+    
+    /* Animation Timings */
+    --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 800ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* 3D Glass Card Effect */
+  .card-3d {
+    @apply relative bg-gradient-to-br from-card to-card/80;
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-3d);
+    transform-style: preserve-3d;
+    transition: all var(--transition-normal);
+  }
+
+  .card-3d:hover {
+    transform: translateY(-8px) rotateX(2deg) rotateY(2deg);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* Glassmorphism Navigation */
+  .glass-nav {
+    @apply bg-background/10 backdrop-blur-xl border-b border-white/10;
+    box-shadow: 0 8px 32px hsl(220 20% 0% / 0.1);
+  }
+
+  /* 3D Button Effects */
+  .btn-3d {
+    @apply relative overflow-hidden transform-gpu;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-3d);
+    transition: all var(--transition-fast);
+    transform-style: preserve-3d;
+  }
+
+  .btn-3d:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-hover), var(--shadow-glow);
+  }
+
+  .btn-3d:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Tilt Effect for Interactive Elements */
+  .hover-tilt {
+    @apply transform-gpu transition-all duration-300;
+    transform-style: preserve-3d;
+  }
+
+  .hover-tilt:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px);
+  }
+
+  /* Parallax Scroll Elements */
+  .parallax-slow {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Reveal Animation */
+  .reveal-up {
+    @apply opacity-0 translate-y-8;
+    transition: all var(--transition-slow);
+  }
+
+  .reveal-up.visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Hero Text Glow */
+  .text-glow {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  /* Mobile Optimization */
+  @media (max-width: 768px) {
+    .card-3d:hover {
+      transform: translateY(-4px);
+    }
+    
+    .hover-tilt:hover {
+      transform: perspective(1000px) rotateX(2deg) rotateY(2deg) translateZ(10px);
+    }
+  }
+}
