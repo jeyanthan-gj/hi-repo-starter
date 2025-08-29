@@ -156,7 +156,7 @@ const AccessoryProductManagement = () => {
         original_price: newProduct.original_price ? parseFloat(newProduct.original_price) : null,
         rating: newProduct.rating ? parseFloat(newProduct.rating) : null,
         reviews: newProduct.reviews ? parseInt(newProduct.reviews) : null,
-        subcategory_id: newProduct.subcategory_id || null
+        subcategory_id: newProduct.subcategory_id === 'none' ? null : newProduct.subcategory_id || null
       };
 
       const { error } = await supabase
@@ -217,7 +217,7 @@ const AccessoryProductManagement = () => {
         original_price: editingProduct.original_price ? parseFloat(editingProduct.original_price) : null,
         rating: editingProduct.rating ? parseFloat(editingProduct.rating) : null,
         reviews: editingProduct.reviews ? parseInt(editingProduct.reviews) : null,
-        subcategory_id: editingProduct.subcategory_id || null
+        subcategory_id: editingProduct.subcategory_id === 'none' ? null : editingProduct.subcategory_id || null
       };
 
       const { error } = await supabase
@@ -325,13 +325,16 @@ const AccessoryProductManagement = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {subcategories.length === 0 ? (
-                    <SelectItem value="" disabled>No subcategories available</SelectItem>
+                    <SelectItem value="none" disabled>No subcategories available</SelectItem>
                   ) : (
-                    subcategories.map((subcategory) => (
-                      <SelectItem key={subcategory.id} value={subcategory.id}>
-                        {subcategory.name}
-                      </SelectItem>
-                    ))
+                    <>
+                      <SelectItem value="none">None</SelectItem>
+                      {subcategories.map((subcategory) => (
+                        <SelectItem key={subcategory.id} value={subcategory.id}>
+                          {subcategory.name}
+                        </SelectItem>
+                      ))}
+                    </>
                   )}
                 </SelectContent>
               </Select>
@@ -512,7 +515,7 @@ const AccessoryProductManagement = () => {
                                 <SelectValue placeholder="Subcategory" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">None</SelectItem>
+                                <SelectItem value="none">None</SelectItem>
                                 {subcategories.map((subcategory) => (
                                   <SelectItem key={subcategory.id} value={subcategory.id}>
                                     {subcategory.name}
