@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, ShoppingCart, Shield, Headphones, Cable, Smartphone } from "lucide-react";
+import { Star, ShoppingCart, ArrowLeft, Shield, Headphones, Cable, Smartphone } from "lucide-react";
 import mobileAccessoriesImage from "@/assets/mobile-accessories.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -11,16 +12,16 @@ interface Category {
   id: string;
   name: string;
   description: string | null;
-  icon_name: string | null;
-  products: Product[];
-  subcategories: Subcategory[];
+  icon: string | null;
+  image_url: string | null;
 }
 
 interface Subcategory {
   id: string;
   name: string;
   description: string | null;
-  products: Product[];
+  image_url: string | null;
+  category_id: string;
 }
 
 interface Product {
@@ -32,77 +33,53 @@ interface Product {
   rating: number | null;
   reviews: number | null;
   image_url: string | null;
+  category_id: string;
+  subcategory_id: string | null;
 }
 
 const Accessories = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  
+  const categoryId = searchParams.get('category');
+  const subcategoryId = searchParams.get('subcategory');
+  const productId = searchParams.get('product');
+  
   const [categories, setCategories] = useState<Category[]>([]);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<Subcategory | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchAccessories();
-  }, []);
+    if (productId) {
+      fetchProductDetails(productId);
+    } else if (subcategoryId) {
+      fetchSubcategoryProducts(subcategoryId);
+    } else if (categoryId) {
+      fetchCategoryData(categoryId);
+    } else {
+      fetchCategories();
+    }
+  }, [categoryId, subcategoryId, productId]);
 
-  const fetchAccessories = async () => {
+  const fetchCategories = async () => {
     try {
-      // For now, use hardcoded data until types are updated
-      setCategories([]);
-      setLoading(false);
-      
-      // TODO: Uncomment when Supabase types are updated
-      /*
-      const { data: categoriesData, error: categoriesError } = await supabase
+      setLoading(true);
+      const { data, error } = await supabase
         .from('accessory_categories')
-        .select(`
-          id,
-          name,
-          description,
-          icon_name,
-          accessory_subcategories (
-            id,
-            name,
-            description,
-            accessory_products (
-              id,
-              name,
-              description,
-              price,
-              original_price,
-              rating,
-              reviews,
-              image_url
-            )
-          ),
-          accessory_products (
-            id,
-            name,
-            description,
-            price,
-            original_price,
-            rating,
-            reviews,
-            image_url
-          )
-        `)
+        .select('*')
         .order('name');
 
-      if (categoriesError) throw categoriesError;
-
-      const processedCategories: Category[] = (categoriesData || []).map(cat => ({
-        ...cat,
-        products: cat.accessory_products || [],
-        subcategories: (cat.accessory_subcategories || []).map(sub => ({
-          ...sub,
-          products: sub.accessory_products || []
-        }))
-      }));
-
-      setCategories(processedCategories);
-      */
+      if (error) throw error;
+      setCategories(data || []);
     } catch (error) {
-      console.error('Error fetching accessories:', error);
+      console.error('Error fetching categories:', error);
       toast({
         title: "Error",
-        description: "Failed to load accessories",
+        description: "Failed to load categories",
         variant: "destructive",
       });
     } finally {
@@ -110,29 +87,163 @@ const Accessories = () => {
     }
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+  const fetchCategoryData = async (catId: string) => {
+    try {
+      setLoading(true);
+      
+      // Fetch category details
+      const { data: categoryData, error: categoryError } = await supabase
+        .from('accessory_categories')
+        .select('*')
+        .eq('id', catId)
+        .single();
 
-    document.querySelectorAll(".reveal-up").forEach((el) => observer.observe(el));
-    
-    return () => observer.disconnect();
-  }, []);
+      if (categoryError) throw categoryError;
+      setSelectedCategory(categoryData);
+
+      // Fetch subcategories for this category
+      const { data: subcategoriesData, error: subcategoriesError } = await supabase
+        .from('accessory_subcategories')
+        .select('*')
+        .eq('category_id', catId)
+        .order('name');
+
+      if (subcategoriesError) throw subcategoriesError;
+      setSubcategories(subcategoriesData || []);
+
+      // If no subcategories, fetch products directly
+      if (!subcategoriesData || subcategoriesData.length === 0) {
+        const { data: productsData, error: productsError } = await supabase
+          .from('accessory_products')
+          .select('*')
+          .eq('category_id', catId)
+          .is('subcategory_id', null)
+          .order('name');
+
+        if (productsError) throw productsError;
+        setProducts(productsData || []);
+      }
+    } catch (error) {
+      console.error('Error fetching category data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load category data",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSubcategoryProducts = async (subId: string) => {
+    try {
+      setLoading(true);
+      
+      // Fetch subcategory details
+      const { data: subcategoryData, error: subcategoryError } = await supabase
+        .from('accessory_subcategories')
+        .select('*, accessory_categories(*)')
+        .eq('id', subId)
+        .single();
+
+      if (subcategoryError) throw subcategoryError;
+      setSelectedSubcategory(subcategoryData);
+      setSelectedCategory(subcategoryData.accessory_categories);
+
+      // Fetch products for this subcategory
+      const { data: productsData, error: productsError } = await supabase
+        .from('accessory_products')
+        .select('*')
+        .eq('subcategory_id', subId)
+        .order('name');
+
+      if (productsError) throw productsError;
+      setProducts(productsData || []);
+    } catch (error) {
+      console.error('Error fetching subcategory products:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load products",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProductDetails = async (prodId: string) => {
+    try {
+      setLoading(true);
+      
+      const { data: productData, error: productError } = await supabase
+        .from('accessory_products')
+        .select(`
+          *,
+          accessory_categories(*),
+          accessory_subcategories(*)
+        `)
+        .eq('id', prodId)
+        .single();
+
+      if (productError) throw productError;
+      setSelectedProduct(productData);
+      setSelectedCategory(productData.accessory_categories);
+      if (productData.accessory_subcategories) {
+        setSelectedSubcategory(productData.accessory_subcategories);
+      }
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load product details",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCategoryClick = (category: Category) => {
+    navigate(`/accessories?category=${category.id}`);
+  };
+
+  const handleSubcategoryClick = (subcategory: Subcategory) => {
+    navigate(`/accessories?category=${selectedCategory?.id}&subcategory=${subcategory.id}`);
+  };
+
+  const handleProductClick = (product: Product) => {
+    const params = new URLSearchParams();
+    params.set('category', product.category_id);
+    if (product.subcategory_id) {
+      params.set('subcategory', product.subcategory_id);
+    }
+    params.set('product', product.id);
+    navigate(`/accessories?${params.toString()}`);
+  };
+
+  const handleBack = () => {
+    if (productId) {
+      // From product back to subcategory or category
+      if (subcategoryId) {
+        navigate(`/accessories?category=${categoryId}&subcategory=${subcategoryId}`);
+      } else {
+        navigate(`/accessories?category=${categoryId}`);
+      }
+    } else if (subcategoryId) {
+      // From subcategory back to category
+      navigate(`/accessories?category=${categoryId}`);
+    } else if (categoryId) {
+      // From category back to categories list
+      navigate('/accessories');
+    }
+  };
 
   const getIconComponent = (iconName: string | null) => {
-    switch (iconName) {
-      case 'Shield': return Shield;
-      case 'Cable': return Cable;
-      case 'Headphones': return Headphones;
-      case 'Smartphone': return Smartphone;
+    switch (iconName?.toLowerCase()) {
+      case 'shield': return Shield;
+      case 'cable': return Cable;
+      case 'headphones': return Headphones;
+      case 'smartphone': return Smartphone;
       default: return Smartphone;
     }
   };
@@ -145,101 +256,161 @@ const Accessories = () => {
     );
   }
 
-  const hardcodedCategories = [
-    {
-      name: "Phone Cases & Covers",
-      icon: Shield,
-      description: "Protect your device with premium cases",
-      items: [
-        {
-          name: "Transparent Soft Case",
-          price: "₹299",
-          originalPrice: "₹399",
-          rating: 4.5,
-          reviews: 123,
-          image: "https://images.unsplash.com/photo-1563298723-dcfebaa392e3?w=400&h=400&fit=crop&crop=center"
-        },
-        {
-          name: "Heavy Duty Armor Case",
-          price: "₹799",
-          originalPrice: "₹999",
-          rating: 4.7,
-          reviews: 89,
-          image: "https://images.unsplash.com/photo-1574739782594-db4edd6ba80d?w=400&h=400&fit=crop&crop=center"
-        }
-      ]
-    },
-    {
-      name: "Chargers & Cables",
-      icon: Cable,
-      description: "Fast charging solutions for all devices",
-      items: [
-        {
-          name: "USB-C Fast Charger 65W",
-          price: "₹1,299",
-          originalPrice: "₹1,599",
-          rating: 4.6,
-          reviews: 156,
-          image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop&crop=center"
-        },
-        {
-          name: "Lightning to USB Cable",
-          price: "₹599",
-          originalPrice: "₹799",
-          rating: 4.4,
-          reviews: 234,
-          image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&h=400&fit=crop&crop=center"
-        }
-      ]
-    },
-    {
-      name: "Headphones & Earbuds",
-      icon: Headphones,
-      description: "Premium audio accessories",
-      items: [
-        {
-          name: "Wireless Bluetooth Earbuds",
-          price: "₹2,499",
-          originalPrice: "₹2,999",
-          rating: 4.8,
-          reviews: 67,
-          image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&crop=center"
-        },
-        {
-          name: "Over-Ear Wireless Headphones",
-          price: "₹3,999",
-          originalPrice: "₹4,999",
-          rating: 4.7,
-          reviews: 45,
-          image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop&crop=center"
-        }
-      ]
-    },
-    {
-      name: "Screen Protectors",
-      icon: Smartphone,
-      description: "Protect your screen from scratches",
-      items: [
-        {
-          name: "Tempered Glass Screen Guard",
-          price: "₹199",
-          originalPrice: "₹299",
-          rating: 4.3,
-          reviews: 289,
-          image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop&crop=center"
-        },
-        {
-          name: "Privacy Screen Protector",
-          price: "₹399",
-          originalPrice: "₹499",
-          rating: 4.5,
-          reviews: 78,
-          image: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=400&fit=crop&crop=center"
-        }
-      ]
-    }
-  ];
+  // Product Detail View
+  if (selectedProduct) {
+    const discountPercentage = selectedProduct.original_price 
+      ? Math.round(((selectedProduct.original_price - selectedProduct.price) / selectedProduct.original_price) * 100)
+      : 0;
 
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          <Button variant="outline" onClick={handleBack} className="mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <img
+                src={selectedProduct.image_url || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center"}
+                alt={selectedProduct.name}
+                className="w-full h-96 object-cover rounded-lg"
+              />
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">{selectedProduct.name}</h1>
+                <div className="flex items-center space-x-2 mb-4">
+                  <Badge variant="outline">{selectedCategory?.name}</Badge>
+                  {selectedSubcategory && (
+                    <Badge variant="secondary">{selectedSubcategory.name}</Badge>
+                  )}
+                </div>
+              </div>
+
+              {selectedProduct.rating && (
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                    <span className="font-medium">{selectedProduct.rating}</span>
+                  </div>
+                  {selectedProduct.reviews && (
+                    <span className="text-muted-foreground">({selectedProduct.reviews} reviews)</span>
+                  )}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <div className="flex items-center space-x-3">
+                  <span className="text-3xl font-bold text-primary">₹{selectedProduct.price}</span>
+                  {selectedProduct.original_price && (
+                    <>
+                      <span className="text-lg text-muted-foreground line-through">₹{selectedProduct.original_price}</span>
+                      <Badge className="bg-green-500 text-white">{discountPercentage}% OFF</Badge>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {selectedProduct.description && (
+                <div>
+                  <h3 className="font-semibold mb-2">Description</h3>
+                  <p className="text-muted-foreground">{selectedProduct.description}</p>
+                </div>
+              )}
+
+              <Button size="lg" className="w-full btn-3d">
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Add to Cart
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Products List View (for category or subcategory)
+  if (products.length > 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <Button variant="outline" onClick={handleBack} className="mb-4">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <h1 className="text-3xl font-bold">
+                {selectedSubcategory ? selectedSubcategory.name : selectedCategory?.name} Products
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                {selectedSubcategory ? selectedSubcategory.description : selectedCategory?.description}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onClick={() => handleProductClick(product)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Subcategories List View
+  if (subcategories.length > 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <Button variant="outline" onClick={handleBack} className="mb-4">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Categories
+              </Button>
+              <h1 className="text-3xl font-bold">{selectedCategory?.name}</h1>
+              <p className="text-muted-foreground mt-2">{selectedCategory?.description}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {subcategories.map((subcategory) => (
+              <Card
+                key={subcategory.id}
+                className="card-3d cursor-pointer hover:scale-105 transition-all duration-300"
+                onClick={() => handleSubcategoryClick(subcategory)}
+              >
+                <div className="relative">
+                  <img
+                    src={subcategory.image_url || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=200&fit=crop&crop=center"}
+                    alt={subcategory.name}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                </div>
+                <CardContent className="p-4">
+                  <h3 className="font-bold text-lg mb-2">{subcategory.name}</h3>
+                  {subcategory.description && (
+                    <p className="text-sm text-muted-foreground">{subcategory.description}</p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Categories List View (Default)
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -249,7 +420,7 @@ const Accessories = () => {
       >
         <div className="absolute inset-0 bg-background/80" />
         <div className="relative container mx-auto px-4">
-          <div className="text-center mb-16 reveal-up">
+          <div className="text-center mb-16">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-glow">Mobile Accessories</h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Complete your mobile experience with our premium range of accessories designed to protect, enhance, and personalize your device.
@@ -258,138 +429,67 @@ const Accessories = () => {
         </div>
       </section>
 
-      {/* Categories Overview */}
+      {/* Categories */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 reveal-up">
+          <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-6 text-glow">Shop by Category</h2>
             <p className="text-lg text-muted-foreground">
               Explore our comprehensive range of mobile accessories.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {hardcodedCategories.map((category, index) => (
-              <Card key={index} className="card-3d reveal-up text-center hover:scale-105 transition-all duration-300">
-                <CardContent className="p-6 space-y-4">
-                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
-                    <category.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg">{category.name}</h3>
-                  <p className="text-sm text-muted-foreground">{category.description}</p>
-                  <Badge variant="outline">{category.items.length} Items</Badge>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Products by Category */}
-      {hardcodedCategories.map((category, categoryIndex) => (
-        <section key={categoryIndex} className={`py-20 ${categoryIndex % 2 === 1 ? 'bg-gradient-to-b from-background to-card/50' : ''}`}>
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12 reveal-up">
-              <div className="flex items-center justify-center space-x-3 mb-4">
-                <category.icon className="w-8 h-8 text-primary" />
-                <h2 className="text-3xl font-bold text-glow">{category.name}</h2>
-              </div>
-              <p className="text-muted-foreground">{category.description}</p>
+          {categories.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No categories available yet.</p>
             </div>
-
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {category.items.map((item, itemIndex) => (
-                <Card key={itemIndex} className="card-3d reveal-up overflow-hidden group">
-                  <div className="relative">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-accent text-accent-foreground">
-                        {Math.round(((parseInt(item.originalPrice.slice(1)) - parseInt(item.price.slice(1))) / parseInt(item.originalPrice.slice(1))) * 100)}% OFF
-                      </Badge>
+              {categories.map((category) => {
+                const IconComponent = getIconComponent(category.icon);
+                return (
+                  <Card
+                    key={category.id}
+                    className="card-3d cursor-pointer hover:scale-105 transition-all duration-300 text-center"
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    <div className="relative">
+                      {category.image_url ? (
+                        <img
+                          src={category.image_url}
+                          alt={category.name}
+                          className="w-full h-48 object-cover rounded-t-lg"
+                        />
+                      ) : (
+                        <div className="w-full h-48 bg-gradient-primary flex items-center justify-center rounded-t-lg">
+                          <IconComponent className="w-16 h-16 text-white" />
+                        </div>
+                      )}
                     </div>
-                  </div>
-
-                  <CardContent className="p-4 space-y-3">
-                    <h3 className="font-semibold text-sm line-clamp-2">{item.name}</h3>
-                    
-                    <div className="flex items-center space-x-2">
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        <span className="text-xs font-medium">{item.rating}</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">({item.reviews})</span>
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-primary">{item.price}</span>
-                        <span className="text-xs text-muted-foreground line-through">{item.originalPrice}</span>
-                      </div>
-                    </div>
-
-                    <Button size="sm" className="btn-3d w-full">
-                      <ShoppingCart className="w-3 h-3 mr-1" />
-                      Buy Now
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                    <CardContent className="p-6 space-y-4">
+                      <h3 className="font-bold text-lg">{category.name}</h3>
+                      {category.description && (
+                        <p className="text-sm text-muted-foreground">{category.description}</p>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
-          </div>
-        </section>
-      ))}
-
-      {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-background to-card/50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16 reveal-up">
-            <h2 className="text-4xl font-bold mb-6 text-glow">Why Choose Our Accessories?</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Genuine Products",
-                description: "All accessories are authentic and come with manufacturer warranty.",
-                icon: "✅"
-              },
-              {
-                title: "Perfect Fit",
-                description: "Designed specifically for your device model for optimal compatibility.",
-                icon: "🎯"
-              },
-              {
-                title: "Best Value",
-                description: "Competitive prices with regular discounts and combo offers.",
-                icon: "💰"
-              }
-            ].map((feature, index) => (
-              <Card key={index} className="card-3d reveal-up text-center">
-                <CardContent className="p-8 space-y-4">
-                  <div className="text-4xl">{feature.icon}</div>
-                  <h3 className="text-xl font-bold">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          )}
         </div>
       </section>
     </div>
   );
 };
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({ product, onClick }: { product: Product; onClick: () => void }) => {
   const discountPercentage = product.original_price 
     ? Math.round(((product.original_price - product.price) / product.original_price) * 100)
     : 0;
 
   return (
-    <Card className="card-3d reveal-up overflow-hidden group">
+    <Card className="card-3d cursor-pointer overflow-hidden group" onClick={onClick}>
       <div className="relative">
         <img 
           src={product.image_url || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop&crop=center"} 
@@ -429,9 +529,9 @@ const ProductCard = ({ product }: { product: Product }) => {
           </div>
         </div>
 
-        <Button size="sm" className="btn-3d w-full">
+        <Button size="sm" className="btn-3d w-full" onClick={(e) => { e.stopPropagation(); onClick(); }}>
           <ShoppingCart className="w-3 h-3 mr-1" />
-          Buy Now
+          View Details
         </Button>
       </CardContent>
     </Card>
