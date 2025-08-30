@@ -393,7 +393,7 @@ const Accessories = () => {
                   <img
                     src={subcategory.image_url || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=200&fit=crop&crop=center"}
                     alt={subcategory.name}
-                    className="w-full h-48 object-cover rounded-t-lg"
+                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
                 <CardContent className="p-4">
@@ -458,10 +458,10 @@ const Accessories = () => {
                         <img
                           src={category.image_url}
                           alt={category.name}
-                          className="w-full h-48 object-cover rounded-t-lg"
+                          className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                       ) : (
-                        <div className="w-full h-48 bg-gradient-primary flex items-center justify-center rounded-t-lg">
+                        <div className="w-full h-64 bg-gradient-primary flex items-center justify-center">
                           <IconComponent className="w-16 h-16 text-white" />
                         </div>
                       )}
@@ -494,7 +494,7 @@ const ProductCard = ({ product, onClick }: { product: Product; onClick: () => vo
         <img 
           src={product.image_url || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop&crop=center"} 
           alt={product.name}
-          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
         />
         {discountPercentage > 0 && (
           <div className="absolute top-4 right-4">
