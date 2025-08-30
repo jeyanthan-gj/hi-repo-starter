@@ -28,6 +28,23 @@ import {
 } from "lucide-react";
 import mobileRepairImage from "@/assets/mobile-repair.jpg";
 
+// Import service images
+import screenRepairImage from "@/assets/Screen Repair or Replacement.jpg";
+import batteryReplacementImage from "@/assets/Battery Replacement.jpg";
+import cameraRepairImage from "@/assets/Camera Repair.jpg";
+import chargingPortRepairImage from "@/assets/Charging Port Repair.jpg";
+import speakerRepairImage from "@/assets/Speaker Repair.jpg";
+import microphoneRepairImage from "@/assets/Microphone Repair.jpg";
+import homeButtonRepairImage from "@/assets/Home Button Repair.jpg";
+import softwareTroubleshootingImage from "@/assets/Software Troubleshooting.jpg";
+import dataRecoveryImage from "@/assets/Data Recovery.jpg";
+import volumePowerButtonRepairImage from "@/assets/Volume and Power Button Repair.jpg";
+import fingerprintSensorRepairImage from "@/assets/Fingerprint Sensor Repair.jpg";
+import backPanelReplacementImage from "@/assets/Back Panel Replacement.jpg";
+import motherboardRepairImage from "@/assets/Motherboard Repair or Replacement.jpg";
+import headphoneJackRepairImage from "@/assets/Headphone Jack Repair.jpg";
+import anyOtherIssueImage from "@/assets/Any Other Issue.jpg";
+
 const Services = () => {
   const [selectedService, setSelectedService] = useState("");
   const [isVisible, setIsVisible] = useState(false);
@@ -58,7 +75,7 @@ const Services = () => {
       description: "Professional screen repair and replacement for all mobile devices with high-quality parts.",
       price: "₹1,500 - ₹8,000",
       time: "30 minutes - 2 hours",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&fit=crop&crop=center"
+      image: screenRepairImage
     },
     {
       title: "Battery Replacement",
@@ -66,7 +83,7 @@ const Services = () => {
       description: "Replace old or faulty batteries to restore your phone's power and performance.",
       price: "₹800 - ₹3,500",
       time: "20 - 45 minutes",
-      image: "https://images.unsplash.com/photo-1609592439469-a1ba9a7b9e5e?w=400&h=400&fit=crop&crop=center"
+      image: batteryReplacementImage
     },
     {
       title: "Camera Repair",
@@ -74,7 +91,7 @@ const Services = () => {
       description: "Fix camera issues, lens replacement, and calibration for perfect photo quality.",
       price: "₹1,200 - ₹5,000",
       time: "45 minutes - 3 hours",
-      image: "https://images.unsplash.com/photo-1606983340737-7e5e0a0e8b0d?w=400&h=400&fit=crop&crop=center"
+      image: cameraRepairImage
     },
     {
       title: "Charging Port Repair",
@@ -82,7 +99,7 @@ const Services = () => {
       description: "Repair or replace damaged charging ports to restore proper charging functionality.",
       price: "₹600 - ₹2,500",
       time: "30 minutes - 1 hour",
-      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop&crop=center"
+      image: chargingPortRepairImage
     },
     {
       title: "Speaker Repair",
@@ -90,7 +107,7 @@ const Services = () => {
       description: "Fix audio issues, speaker replacement, and sound quality optimization.",
       price: "₹500 - ₹2,000",
       time: "20 - 60 minutes",
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&crop=center"
+      image: speakerRepairImage
     },
     {
       title: "Microphone Repair",
@@ -98,7 +115,7 @@ const Services = () => {
       description: "Restore clear call quality and voice recording with microphone repairs.",
       price: "₹400 - ₹1,800",
       time: "25 - 50 minutes",
-      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop&crop=center"
+      image: microphoneRepairImage
     },
     {
       title: "Home Button Repair",
@@ -106,7 +123,7 @@ const Services = () => {
       description: "Fix non-responsive home buttons and restore full functionality.",
       price: "₹300 - ₹1,500",
       time: "15 - 45 minutes",
-      image: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=400&fit=crop&crop=center"
+      image: homeButtonRepairImage
     },
     {
       title: "Software Troubleshooting",
@@ -114,7 +131,7 @@ const Services = () => {
       description: "Resolve software issues, OS updates, and performance optimization.",
       price: "₹200 - ₹1,000",
       time: "30 minutes - 2 hours",
-      image: "https://images.unsplash.com/photo-1563298723-dcfebaa392e3?w=400&h=400&fit=crop&crop=center"
+      image: softwareTroubleshootingImage
     },
     {
       title: "Data Recovery",
@@ -122,7 +139,7 @@ const Services = () => {
       description: "Recover lost photos, contacts, and important data from damaged devices.",
       price: "₹1,000 - ₹5,000",
       time: "2 - 24 hours",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=400&fit=crop&crop=center"
+      image: dataRecoveryImage
     },
     {
       title: "Volume and Power Button Repair",
@@ -130,7 +147,7 @@ const Services = () => {
       description: "Fix stuck or non-responsive volume and power buttons.",
       price: "₹300 - ₹1,200",
       time: "20 - 40 minutes",
-      image: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=400&fit=crop&crop=center"
+      image: volumePowerButtonRepairImage
     },
     {
       title: "Fingerprint Sensor Repair",
@@ -138,7 +155,7 @@ const Services = () => {
       description: "Restore fingerprint unlock functionality and biometric security.",
       price: "₹800 - ₹3,000",
       time: "45 minutes - 2 hours",
-      image: "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&h=400&fit=crop&crop=center"
+      image: fingerprintSensorRepairImage
     },
     {
       title: "Back Panel Replacement",
@@ -146,7 +163,7 @@ const Services = () => {
       description: "Replace cracked or damaged back panels with original quality parts.",
       price: "₹600 - ₹4,000",
       time: "30 minutes - 1.5 hours",
-      image: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&h=400&fit=crop&crop=center"
+      image: backPanelReplacementImage
     },
     {
       title: "Motherboard Repair or Replacement",
@@ -154,7 +171,7 @@ const Services = () => {
       description: "Complex motherboard repairs and replacements for critical hardware issues.",
       price: "₹2,000 - ₹15,000",
       time: "4 - 48 hours",
-      image: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400&h=400&fit=crop&crop=center"
+      image: motherboardRepairImage
     },
     {
       title: "Headphone Jack Repair",
@@ -162,7 +179,7 @@ const Services = () => {
       description: "Fix audio jack connectivity issues for headphones and external speakers.",
       price: "₹400 - ₹1,500",
       time: "25 - 50 minutes",
-      image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop&crop=center"
+      image: headphoneJackRepairImage
     },
     {
       title: "Any Other Issue",
@@ -170,7 +187,7 @@ const Services = () => {
       description: "Have a different problem? Contact us for personalized repair solutions.",
       price: "Quote on inspection",
       time: "Varies",
-      image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=400&fit=crop&crop=center"
+      image: anyOtherIssueImage
     }
   ];
 
