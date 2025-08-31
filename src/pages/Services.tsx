@@ -28,22 +28,8 @@ import {
 } from "lucide-react";
 import mobileRepairImage from "@/assets/mobile-repair.jpg";
 
-// Import service images
-import screenRepairImage from "@/assets/Screen Repair or Replacement.jpg";
-import batteryReplacementImage from "@/assets/Battery Replacement.jpg";
-import cameraRepairImage from "@/assets/Camera Repair.jpg";
-import chargingPortRepairImage from "@/assets/Charging Port Repair.jpg";
-import speakerRepairImage from "@/assets/Speaker Repair.jpg";
-import microphoneRepairImage from "@/assets/Microphone Repair.jpg";
-import homeButtonRepairImage from "@/assets/Home Button Repair.jpg";
-import softwareTroubleshootingImage from "@/assets/Software Troubleshooting.jpg";
-import dataRecoveryImage from "@/assets/Data Recovery.jpg";
-import volumePowerButtonRepairImage from "@/assets/Volume and Power Button Repair.jpg";
-import fingerprintSensorRepairImage from "@/assets/Fingerprint Sensor Repair.jpg";
-import backPanelReplacementImage from "@/assets/Back Panel Replacement.jpg";
-import motherboardRepairImage from "@/assets/Motherboard Repair or Replacement.jpg";
-import headphoneJackRepairImage from "@/assets/Headphone Jack Repair.jpg";
-import anyOtherIssueImage from "@/assets/Any Other Issue.jpg";
+// Temporary placeholder until specific service images are uploaded
+const serviceImage = mobileRepairImage;
 
 const Services = () => {
   const [selectedService, setSelectedService] = useState("");
@@ -75,7 +61,7 @@ const Services = () => {
       description: "Professional screen repair and replacement for all mobile devices with high-quality parts.",
       price: "₹1,500 - ₹8,000",
       time: "30 minutes - 2 hours",
-      image: screenRepairImage
+      image: serviceImage
     },
     {
       title: "Battery Replacement",
@@ -83,7 +69,7 @@ const Services = () => {
       description: "Replace old or faulty batteries to restore your phone's power and performance.",
       price: "₹800 - ₹3,500",
       time: "20 - 45 minutes",
-      image: batteryReplacementImage
+      image: serviceImage
     },
     {
       title: "Camera Repair",
@@ -91,7 +77,7 @@ const Services = () => {
       description: "Fix camera issues, lens replacement, and calibration for perfect photo quality.",
       price: "₹1,200 - ₹5,000",
       time: "45 minutes - 3 hours",
-      image: cameraRepairImage
+      image: serviceImage
     },
     {
       title: "Charging Port Repair",
@@ -99,7 +85,7 @@ const Services = () => {
       description: "Repair or replace damaged charging ports to restore proper charging functionality.",
       price: "₹600 - ₹2,500",
       time: "30 minutes - 1 hour",
-      image: chargingPortRepairImage
+      image: serviceImage
     },
     {
       title: "Speaker Repair",
@@ -107,7 +93,7 @@ const Services = () => {
       description: "Fix audio issues, speaker replacement, and sound quality optimization.",
       price: "₹500 - ₹2,000",
       time: "20 - 60 minutes",
-      image: speakerRepairImage
+      image: serviceImage
     },
     {
       title: "Microphone Repair",
@@ -115,7 +101,7 @@ const Services = () => {
       description: "Restore clear call quality and voice recording with microphone repairs.",
       price: "₹400 - ₹1,800",
       time: "25 - 50 minutes",
-      image: microphoneRepairImage
+      image: serviceImage
     },
     {
       title: "Home Button Repair",
@@ -123,7 +109,7 @@ const Services = () => {
       description: "Fix non-responsive home buttons and restore full functionality.",
       price: "₹300 - ₹1,500",
       time: "15 - 45 minutes",
-      image: homeButtonRepairImage
+      image: serviceImage
     },
     {
       title: "Software Troubleshooting",
@@ -131,7 +117,7 @@ const Services = () => {
       description: "Resolve software issues, OS updates, and performance optimization.",
       price: "₹200 - ₹1,000",
       time: "30 minutes - 2 hours",
-      image: softwareTroubleshootingImage
+      image: serviceImage
     },
     {
       title: "Data Recovery",
@@ -139,7 +125,7 @@ const Services = () => {
       description: "Recover lost photos, contacts, and important data from damaged devices.",
       price: "₹1,000 - ₹5,000",
       time: "2 - 24 hours",
-      image: dataRecoveryImage
+      image: serviceImage
     },
     {
       title: "Volume and Power Button Repair",
@@ -147,7 +133,7 @@ const Services = () => {
       description: "Fix stuck or non-responsive volume and power buttons.",
       price: "₹300 - ₹1,200",
       time: "20 - 40 minutes",
-      image: volumePowerButtonRepairImage
+      image: serviceImage
     },
     {
       title: "Fingerprint Sensor Repair",
@@ -155,7 +141,7 @@ const Services = () => {
       description: "Restore fingerprint unlock functionality and biometric security.",
       price: "₹800 - ₹3,000",
       time: "45 minutes - 2 hours",
-      image: fingerprintSensorRepairImage
+      image: serviceImage
     },
     {
       title: "Back Panel Replacement",
@@ -163,7 +149,7 @@ const Services = () => {
       description: "Replace cracked or damaged back panels with original quality parts.",
       price: "₹600 - ₹4,000",
       time: "30 minutes - 1.5 hours",
-      image: backPanelReplacementImage
+      image: serviceImage
     },
     {
       title: "Motherboard Repair or Replacement",
@@ -171,7 +157,7 @@ const Services = () => {
       description: "Complex motherboard repairs and replacements for critical hardware issues.",
       price: "₹2,000 - ₹15,000",
       time: "4 - 48 hours",
-      image: motherboardRepairImage
+      image: serviceImage
     },
     {
       title: "Headphone Jack Repair",
@@ -179,7 +165,7 @@ const Services = () => {
       description: "Fix audio jack connectivity issues for headphones and external speakers.",
       price: "₹400 - ₹1,500",
       time: "25 - 50 minutes",
-      image: headphoneJackRepairImage
+      image: serviceImage
     },
     {
       title: "Any Other Issue",
@@ -187,7 +173,7 @@ const Services = () => {
       description: "Have a different problem? Contact us for personalized repair solutions.",
       price: "Quote on inspection",
       time: "Varies",
-      image: anyOtherIssueImage
+      image: serviceImage
     }
   ];
 
