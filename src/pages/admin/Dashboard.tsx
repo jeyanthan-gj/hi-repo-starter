@@ -9,7 +9,8 @@ import {
   Users, 
   Settings,
   BarChart3,
-  ShoppingBag
+  ShoppingBag,
+  Headphones
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -144,6 +145,69 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Accessories Management */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Accessories Management</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="card-3d border-border/50 hover-tilt">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-foreground">
+                  <Headphones className="h-6 w-6 text-pink-500" />
+                  Accessory Categories
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Manage accessory categories and their information
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link to="/admin/accessory-categories">
+                  <Button className="w-full btn-3d">
+                    Manage Categories
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="card-3d border-border/50 hover-tilt">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-foreground">
+                  <Package className="h-6 w-6 text-cyan-500" />
+                  Subcategories
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Add and manage accessory subcategories
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link to="/admin/accessory-subcategories">
+                  <Button className="w-full btn-3d">
+                    Manage Subcategories
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="card-3d border-border/50 hover-tilt">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-foreground">
+                  <ShoppingBag className="h-6 w-6 text-emerald-500" />
+                  Products
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Manage accessory products and inventory
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link to="/admin/accessory-products">
+                  <Button className="w-full btn-3d">
+                    Manage Products
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Recent Activity */}
