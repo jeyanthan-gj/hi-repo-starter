@@ -5,8 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Eye, Download, X } from "lucide-react";
 import heroImage from "@/assets/hero-mobile-store.jpg";
-import mobileRepairImage from "@/assets/mobile-repair.jpg";
-import mobileAccessoriesImage from "@/assets/mobile-accessories.jpg";
 import aboutImage from "@/assets/about-jayam.jpg";
 
 const Gallery = () => {
@@ -33,11 +31,9 @@ const Gallery = () => {
   }, []);
 
   const categories = [
-    { id: "all", name: "All Images", count: 20 },
+    { id: "all", name: "All Images", count: 12 },
     { id: "showroom", name: "Showroom", count: 8 },
-    { id: "products", name: "Products", count: 6 },
-    { id: "repairs", name: "Repairs", count: 4 },
-    { id: "accessories", name: "Accessories", count: 2 }
+    { id: "products", name: "Products", count: 4 }
   ];
 
   // Sample gallery images - in a real app this would come from a backend
@@ -51,132 +47,76 @@ const Gallery = () => {
     },
     {
       id: 2,
-      src: mobileRepairImage,
-      title: "Professional Repair Service",
-      category: "repairs",
-      description: "Expert technicians providing quality mobile repair services"
-    },
-    {
-      id: 3,
-      src: mobileAccessoriesImage,
-      title: "Premium Accessories Collection",
-      category: "accessories",
-      description: "Wide range of mobile accessories and protective gear"
-    },
-    {
-      id: 4,
       src: aboutImage,
       title: "Jayam Mobile Store Interior",
       category: "showroom",
       description: "Welcome to our friendly and professional environment"
     },
     {
-      id: 5,
+      id: 3,
       src: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=600&fit=crop&crop=center",
       title: "Latest iPhone Models",
       category: "products",
       description: "Apple iPhone collection with latest models and variants"
     },
     {
-      id: 6,
+      id: 4,
       src: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=800&h=600&fit=crop&crop=center",
       title: "Samsung Galaxy Series",
       category: "products",
       description: "Samsung smartphones ranging from budget to premium"
     },
     {
-      id: 7,
+      id: 5,
       src: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=800&h=600&fit=crop&crop=center",
       title: "OnePlus Collection",
       category: "products",
       description: "OnePlus devices with flagship features at competitive prices"
     },
     {
-      id: 8,
+      id: 6,
       src: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&h=600&fit=crop&crop=center",
       title: "Xiaomi Redmi Series",
       category: "products",
       description: "Xiaomi smartphones offering great value for money"
     },
     {
-      id: 9,
-      src: "https://images.unsplash.com/photo-1563298723-dcfebaa392e3?w=800&h=600&fit=crop&crop=center",
-      title: "Screen Repair Setup",
-      category: "repairs",
-      description: "Professional screen replacement and repair equipment"
-    },
-    {
-      id: 10,
-      src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop&crop=center",
-      title: "Battery Replacement Service",
-      category: "repairs",
-      description: "Expert battery replacement with genuine parts"
-    },
-    {
-      id: 11,
-      src: "https://images.unsplash.com/photo-1609592439469-a1ba9a7b9e5e?w=800&h=600&fit=crop&crop=center",
-      title: "Diagnostic Equipment",
-      category: "repairs",
-      description: "Advanced tools for accurate mobile device diagnosis"
-    },
-    {
-      id: 12,
-      src: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=600&fit=crop&crop=center",
-      title: "Premium Headphones",
-      category: "accessories",
-      description: "High-quality audio accessories and headphones"
-    },
-    {
-      id: 13,
+      id: 7,
       src: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=800&h=600&fit=crop&crop=center",
       title: "Customer Service Area",
       category: "showroom",
       description: "Comfortable customer consultation and service area"
     },
     {
-      id: 14,
+      id: 8,
       src: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=800&h=600&fit=crop&crop=center",
       title: "Product Display",
       category: "showroom",
       description: "Elegant product displays showcasing latest devices"
     },
     {
-      id: 15,
+      id: 9,
       src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop&crop=center",
       title: "Store Front View",
       category: "showroom",
       description: "Jayam Mobile store exterior in North Bazaar, Anjugramam"
     },
     {
-      id: 16,
-      src: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800&h=600&fit=crop&crop=center",
-      title: "Charging Solutions",
-      category: "products",
-      description: "Fast chargers and power banks for all device types"
-    },
-    {
-      id: 17,
-      src: "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=800&h=600&fit=crop&crop=center",
-      title: "Security Solutions",
-      category: "products",
-      description: "Biometric and security features showcase"
-    },
-    {
-      id: 18,
+      id: 10,
       src: "https://images.unsplash.com/photo-1606983340737-7e5e0a0e8b0d?w=800&h=600&fit=crop&crop=center",
       title: "Camera Testing Zone",
       category: "showroom",
       description: "Interactive area for testing mobile camera capabilities"
     },
     {
-      id: 19,
+      id: 11,
       src: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=600&fit=crop&crop=center",
       title: "Audio Experience Corner",
       category: "showroom",
       description: "Dedicated space for testing audio quality and features"
     },
     {
-      id: 20,
+      id: 12,
       src: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800&h=600&fit=crop&crop=center",
       title: "Team Photo",
       category: "showroom",
