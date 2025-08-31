@@ -22,6 +22,7 @@ import ModelManagement from "./pages/admin/ModelManagement";
 import AccessoryCategoryManagement from "./pages/admin/AccessoryCategoryManagement";
 import AccessorySubcategoryManagement from "./pages/admin/AccessorySubcategoryManagement";
 import AccessoryProductManagement from "./pages/admin/AccessoryProductManagement";
+import GalleryManagement from "./pages/admin/GalleryManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -94,6 +95,14 @@ const App = () => (
               element={
                 <ProtectedRoute requireAdmin>
                   <AccessoryProductManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/gallery" 
+              element={
+                <ProtectedRoute requireAdmin>
+                  <GalleryManagement />
                 </ProtectedRoute>
               } 
             />

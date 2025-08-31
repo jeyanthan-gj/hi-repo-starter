@@ -3,16 +3,28 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Eye, Download, X } from "lucide-react";
+import { Eye } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-mobile-store.jpg";
 import aboutImage from "@/assets/about-jayam.jpg";
+
+interface GalleryPhoto {
+  id: string;
+  title: string;
+  description: string | null;
+  image_url: string;
+  category: 'showroom' | 'products';
+}
 
 const Gallery = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isVisible, setIsVisible] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<GalleryPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setIsVisible(true);
+    fetchGalleryPhotos();
     
     const observer = new IntersectionObserver(
       (entries) => {
@@ -30,98 +42,63 @@ const Gallery = () => {
     return () => observer.disconnect();
   }, []);
 
-  const categories = [
-    { id: "all", name: "All Images", count: 12 },
-    { id: "showroom", name: "Showroom", count: 8 },
-    { id: "products", name: "Products", count: 4 }
-  ];
+  const fetchGalleryPhotos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('gallery_photos')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-  // Sample gallery images - in a real app this would come from a backend
-  const galleryImages = [
-    {
-      id: 1,
-      src: heroImage,
-      title: "Modern Mobile Showroom",
-      category: "showroom",
-      description: "Our state-of-the-art showroom featuring the latest smartphones"
-    },
-    {
-      id: 2,
-      src: aboutImage,
-      title: "Jayam Mobile Store Interior",
-      category: "showroom",
-      description: "Welcome to our friendly and professional environment"
-    },
-    {
-      id: 3,
-      src: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=600&fit=crop&crop=center",
-      title: "Latest iPhone Models",
-      category: "products",
-      description: "Apple iPhone collection with latest models and variants"
-    },
-    {
-      id: 4,
-      src: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=800&h=600&fit=crop&crop=center",
-      title: "Samsung Galaxy Series",
-      category: "products",
-      description: "Samsung smartphones ranging from budget to premium"
-    },
-    {
-      id: 5,
-      src: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=800&h=600&fit=crop&crop=center",
-      title: "OnePlus Collection",
-      category: "products",
-      description: "OnePlus devices with flagship features at competitive prices"
-    },
-    {
-      id: 6,
-      src: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&h=600&fit=crop&crop=center",
-      title: "Xiaomi Redmi Series",
-      category: "products",
-      description: "Xiaomi smartphones offering great value for money"
-    },
-    {
-      id: 7,
-      src: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=800&h=600&fit=crop&crop=center",
-      title: "Customer Service Area",
-      category: "showroom",
-      description: "Comfortable customer consultation and service area"
-    },
-    {
-      id: 8,
-      src: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=800&h=600&fit=crop&crop=center",
-      title: "Product Display",
-      category: "showroom",
-      description: "Elegant product displays showcasing latest devices"
-    },
-    {
-      id: 9,
-      src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop&crop=center",
-      title: "Store Front View",
-      category: "showroom",
-      description: "Jayam Mobile store exterior in North Bazaar, Anjugramam"
-    },
-    {
-      id: 10,
-      src: "https://images.unsplash.com/photo-1606983340737-7e5e0a0e8b0d?w=800&h=600&fit=crop&crop=center",
-      title: "Camera Testing Zone",
-      category: "showroom",
-      description: "Interactive area for testing mobile camera capabilities"
-    },
-    {
-      id: 11,
-      src: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=600&fit=crop&crop=center",
-      title: "Audio Experience Corner",
-      category: "showroom",
-      description: "Dedicated space for testing audio quality and features"
-    },
-    {
-      id: 12,
-      src: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800&h=600&fit=crop&crop=center",
-      title: "Team Photo",
-      category: "showroom",
-      description: "Our dedicated team of mobile experts and technicians"
+      if (error) throw error;
+      
+      // Add fallback images if no data from database
+      const dbImages = (data as GalleryPhoto[]) || [];
+      const fallbackImages: GalleryPhoto[] = [
+        {
+          id: 'hero-1',
+          title: "Modern Mobile Showroom",
+          category: "showroom",
+          description: "Our state-of-the-art showroom featuring the latest smartphones",
+          image_url: heroImage
+        },
+        {
+          id: 'about-1',
+          title: "Jayam Mobile Store Interior",
+          category: "showroom",
+          description: "Welcome to our friendly and professional environment",
+          image_url: aboutImage
+        }
+      ];
+      
+      setGalleryImages(dbImages.length > 0 ? dbImages : fallbackImages);
+    } catch (error) {
+      console.error('Error fetching gallery photos:', error);
+      // Use fallback images on error
+      setGalleryImages([
+        {
+          id: 'hero-1',
+          title: "Modern Mobile Showroom",
+          category: "showroom",
+          description: "Our state-of-the-art showroom featuring the latest smartphones",
+          image_url: heroImage
+        },
+        {
+          id: 'about-1',
+          title: "Jayam Mobile Store Interior",
+          category: "showroom",
+          description: "Welcome to our friendly and professional environment",
+          image_url: aboutImage
+        }
+      ]);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const categories = [
+    { id: "all", name: "All Images", count: galleryImages.length },
+    { id: "showroom", name: "Showroom", count: galleryImages.filter(img => img.category === 'showroom').length },
+    { id: "products", name: "Products", count: galleryImages.filter(img => img.category === 'products').length }
   ];
 
   const filteredImages = selectedCategory === "all" 
@@ -171,7 +148,7 @@ const Gallery = () => {
               <Card key={image.id} className="card-3d reveal-up overflow-hidden group">
                 <div className="relative">
                   <img 
-                    src={image.src} 
+                    src={image.image_url} 
                     alt={image.title}
                     className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -189,7 +166,7 @@ const Gallery = () => {
                       <DialogContent className="max-w-4xl bg-card/95 backdrop-blur-xl border-border">
                         <div className="relative">
                           <img 
-                            src={image.src} 
+                            src={image.image_url} 
                             alt={image.title}
                             className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
                           />

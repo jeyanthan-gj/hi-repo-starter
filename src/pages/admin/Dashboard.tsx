@@ -10,7 +10,8 @@ import {
   Settings,
   BarChart3,
   ShoppingBag,
-  Headphones
+  Headphones,
+  Image as ImageIcon
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -203,6 +204,31 @@ const AdminDashboard = () => {
                 <Link to="/admin/accessory-products">
                   <Button className="w-full btn-3d">
                     Manage Products
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Gallery Management */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Gallery Management</h2>
+          <div className="grid grid-cols-1 gap-6">
+            <Card className="card-3d border-border/50 hover-tilt">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-foreground">
+                  <ImageIcon className="h-6 w-6 text-indigo-500" />
+                  Gallery Photos
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Manage gallery photos for showroom and products
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link to="/admin/gallery">
+                  <Button className="w-full btn-3d">
+                    Manage Gallery
                   </Button>
                 </Link>
               </CardContent>
