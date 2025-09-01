@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,7 +14,6 @@ interface GalleryPhoto {
   title: string;
   description: string | null;
   image_url: string;
-  category: 'showroom' | 'products';
   created_at: string;
   updated_at: string;
 }
@@ -31,8 +29,7 @@ const GalleryManagement = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    image_url: '',
-    category: 'showroom' as 'showroom' | 'products'
+    image_url: ''
   });
 
   useEffect(() => {
@@ -136,8 +133,7 @@ const GalleryManagement = () => {
     setFormData({
       title: '',
       description: '',
-      image_url: '',
-      category: 'showroom'
+      image_url: ''
     });
     setEditingPhoto(null);
   };
@@ -147,8 +143,7 @@ const GalleryManagement = () => {
     setFormData({
       title: photo.title,
       description: photo.description || '',
-      image_url: photo.image_url,
-      category: photo.category
+      image_url: photo.image_url
     });
     setIsEditDialogOpen(true);
   };
@@ -180,7 +175,7 @@ const GalleryManagement = () => {
                 Gallery Management
               </h1>
               <p className="text-muted-foreground">
-                Manage gallery photos and categories
+                Manage gallery photos
               </p>
             </div>
           </div>
@@ -228,23 +223,6 @@ const GalleryManagement = () => {
                     required
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Category</label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(value: 'showroom' | 'products') => 
-                      setFormData({ ...formData, category: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="showroom">Showroom</SelectItem>
-                      <SelectItem value="products">Products</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
                 <div className="flex gap-2 pt-4">
                   <Button type="submit" disabled={loading} className="btn-3d">
                     Add Photo
@@ -266,7 +244,7 @@ const GalleryManagement = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 gap-6 mb-8">
           <Card className="card-3d">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Photos</CardTitle>
@@ -274,28 +252,6 @@ const GalleryManagement = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{photos.length}</div>
-            </CardContent>
-          </Card>
-          <Card className="card-3d">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Showroom Photos</CardTitle>
-              <ImageIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {photos.filter(p => p.category === 'showroom').length}
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="card-3d">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Product Photos</CardTitle>
-              <ImageIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {photos.filter(p => p.category === 'products').length}
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -313,11 +269,6 @@ const GalleryManagement = () => {
                     e.currentTarget.src = '/placeholder.svg';
                   }}
                 />
-                <div className="absolute top-2 right-2">
-                  <div className="bg-white/20 backdrop-blur-md rounded-full px-2 py-1 text-xs text-white capitalize">
-                    {photo.category}
-                  </div>
-                </div>
               </div>
               <CardContent className="p-4">
                 <h3 className="font-semibold text-sm mb-1 line-clamp-1">{photo.title}</h3>
@@ -400,23 +351,6 @@ const GalleryManagement = () => {
                   type="url"
                   required
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
-                <Select
-                  value={formData.category}
-                  onValueChange={(value: 'showroom' | 'products') => 
-                    setFormData({ ...formData, category: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="showroom">Showroom</SelectItem>
-                    <SelectItem value="products">Products</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
               <div className="flex gap-2 pt-4">
                 <Button type="submit" disabled={loading} className="btn-3d">
