@@ -29,7 +29,8 @@ const GalleryManagement = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    image_url: ''
+    image_url: '',
+    category: 'gallery'
   });
 
   useEffect(() => {
@@ -133,7 +134,8 @@ const GalleryManagement = () => {
     setFormData({
       title: '',
       description: '',
-      image_url: ''
+      image_url: '',
+      category: 'gallery'
     });
     setEditingPhoto(null);
   };
@@ -143,7 +145,8 @@ const GalleryManagement = () => {
     setFormData({
       title: photo.title,
       description: photo.description || '',
-      image_url: photo.image_url
+      image_url: photo.image_url,
+      category: 'gallery'
     });
     setIsEditDialogOpen(true);
   };
