@@ -13,7 +13,9 @@ interface GalleryPhoto {
   title: string;
   description: string | null;
   image_url: string;
-  category: 'showroom' | 'products';
+  category?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const Gallery = () => {
@@ -48,28 +50,35 @@ const Gallery = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       
-      // Add fallback images if no data from database
-      const dbImages = (data as GalleryPhoto[]) || [];
-      const fallbackImages: GalleryPhoto[] = [
-        {
-          id: 'hero-1',
-          title: "Modern Mobile Showroom",
-          category: "showroom",
-          description: "Our state-of-the-art showroom featuring the latest smartphones",
-          image_url: heroImage
-        },
-        {
-          id: 'about-1',
-          title: "Jayam Mobile Store Interior",
-          category: "showroom",
-          description: "Welcome to our friendly and professional environment",
-          image_url: aboutImage
-        }
-      ];
+      console.log('Fetched gallery data:', data);
       
-      setGalleryImages(dbImages.length > 0 ? dbImages : fallbackImages);
+      if (data && data.length > 0) {
+        setGalleryImages(data as GalleryPhoto[]);
+      } else {
+        // Use fallback images if no data from database
+        const fallbackImages: GalleryPhoto[] = [
+          {
+            id: 'hero-1',
+            title: "Modern Mobile Showroom",
+            description: "Our state-of-the-art showroom featuring the latest smartphones",
+            image_url: heroImage,
+            category: "showroom"
+          },
+          {
+            id: 'about-1',
+            title: "Jayam Mobile Store Interior", 
+            description: "Welcome to our friendly and professional environment",
+            image_url: aboutImage,
+            category: "showroom"
+          }
+        ];
+        setGalleryImages(fallbackImages);
+      }
     } catch (error) {
       console.error('Error fetching gallery photos:', error);
       // Use fallback images on error
@@ -77,16 +86,16 @@ const Gallery = () => {
         {
           id: 'hero-1',
           title: "Modern Mobile Showroom",
-          category: "showroom",
           description: "Our state-of-the-art showroom featuring the latest smartphones",
-          image_url: heroImage
+          image_url: heroImage,
+          category: "showroom"
         },
         {
           id: 'about-1',
           title: "Jayam Mobile Store Interior",
-          category: "showroom",
-          description: "Welcome to our friendly and professional environment",
-          image_url: aboutImage
+          description: "Welcome to our friendly and professional environment", 
+          image_url: aboutImage,
+          category: "showroom"
         }
       ]);
     } finally {
@@ -143,9 +152,11 @@ const Gallery = () => {
                           <div className="mt-4 space-y-2">
                             <h3 className="text-xl font-bold">{image.title}</h3>
                             <p className="text-muted-foreground">{image.description}</p>
-                            <Badge variant="outline" className="capitalize">
-                              {image.category}
-                            </Badge>
+                            {image.category && (
+                              <Badge variant="outline" className="capitalize">
+                                {image.category}
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </DialogContent>
@@ -153,11 +164,13 @@ const Gallery = () => {
                   </div>
 
                   {/* Category Badge */}
-                  <div className="absolute top-3 left-3">
-                    <Badge variant="secondary" className="bg-black/50 text-white capitalize">
-                      {image.category}
-                    </Badge>
-                  </div>
+                  {image.category && (
+                    <div className="absolute top-3 left-3">
+                      <Badge variant="secondary" className="bg-black/50 text-white capitalize">
+                        {image.category}
+                      </Badge>
+                    </div>
+                  )}
                 </div>
 
                 <CardContent className="p-4">
