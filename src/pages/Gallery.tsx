@@ -17,7 +17,6 @@ interface GalleryPhoto {
 }
 
 const Gallery = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [isVisible, setIsVisible] = useState(false);
   const [galleryImages, setGalleryImages] = useState<GalleryPhoto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,15 +94,6 @@ const Gallery = () => {
     }
   };
 
-  const categories = [
-    { id: "all", name: "All Images", count: galleryImages.length },
-    { id: "showroom", name: "Showroom", count: galleryImages.filter(img => img.category === 'showroom').length },
-    { id: "products", name: "Products", count: galleryImages.filter(img => img.category === 'products').length }
-  ];
-
-  const filteredImages = selectedCategory === "all" 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === selectedCategory);
 
   return (
     <div className="min-h-screen">
@@ -119,32 +109,12 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="py-8 bg-gradient-to-b from-background to-card/30">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-4 reveal-up">
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                variant={selectedCategory === category.id ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`hover-tilt ${selectedCategory === category.id ? "btn-3d" : ""}`}
-              >
-                {category.name}
-                <Badge variant="secondary" className="ml-2">
-                  {category.count}
-                </Badge>
-              </Button>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Gallery Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredImages.map((image, index) => (
+            {galleryImages.map((image, index) => (
               <Card key={image.id} className="card-3d reveal-up overflow-hidden group">
                 <div className="relative">
                   <img 
