@@ -3,8 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Eye } from "lucide-react";
+import { Eye, Grid, Box } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Gallery3DSlideshow } from "@/components/Gallery3DSlideshow";
 import heroImage from "@/assets/hero-mobile-store.jpg";
 import aboutImage from "@/assets/about-jayam.jpg";
 
@@ -22,6 +23,7 @@ const Gallery = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [galleryImages, setGalleryImages] = useState<GalleryPhoto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'3d' | 'grid'>('3d');
 
   useEffect(() => {
     setIsVisible(true);
@@ -119,79 +121,109 @@ const Gallery = () => {
       </section>
 
 
-      {/* Gallery Grid */}
+      {/* Gallery Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
+          {/* View Toggle */}
+          <div className="flex justify-center mb-8">
+            <div className="bg-card border rounded-lg p-1 flex">
+              <Button
+                variant={viewMode === '3d' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('3d')}
+                className="flex items-center gap-2"
+              >
+                <Box className="h-4 w-4" />
+                3D Slideshow
+              </Button>
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+                className="flex items-center gap-2"
+              >
+                <Grid className="h-4 w-4" />
+                Grid View
+              </Button>
+            </div>
+          </div>
+
           {loading ? (
             <div className="text-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
               <p className="text-muted-foreground">Loading gallery...</p>
             </div>
-          ) : galleryImages.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-muted-foreground">No images found in gallery.</p>
-            </div>
+          ) : viewMode === '3d' ? (
+            <Gallery3DSlideshow images={galleryImages} />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {galleryImages.map((image, index) => (
-                  <Card key={image.id} className="card-3d reveal-up overflow-hidden group">
-                    <div className="relative">
-                      <img 
-                        src={image.image_url} 
-                        alt={image.title}
-                        className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      
-                      {/* Overlay Content */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button size="sm" className="btn-3d">
-                              <Eye className="w-4 h-4 mr-2" />
-                              View
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-4xl bg-card/95 backdrop-blur-xl border-border">
-                            <DialogTitle className="sr-only">{image.title}</DialogTitle>
-                            <DialogDescription className="sr-only">{image.description || "Gallery image"}</DialogDescription>
-                            <div className="relative">
-                              <img 
-                                src={image.image_url} 
-                                alt={image.title}
-                                className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
-                              />
-                              <div className="mt-4 space-y-2">
-                                <h3 className="text-xl font-bold">{image.title}</h3>
-                                <p className="text-muted-foreground">{image.description}</p>
-                                {image.category && (
-                                  <Badge variant="outline" className="capitalize">
-                                    {image.category}
-                                  </Badge>
-                                )}
+            <>
+              {galleryImages.length === 0 ? (
+                <div className="text-center py-20">
+                  <p className="text-muted-foreground">No images found in gallery.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {galleryImages.map((image, index) => (
+                    <Card key={image.id} className="card-3d reveal-up overflow-hidden group">
+                      <div className="relative">
+                        <img 
+                          src={image.image_url} 
+                          alt={image.title}
+                          className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        
+                        {/* Overlay Content */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button size="sm" className="btn-3d">
+                                <Eye className="w-4 h-4 mr-2" />
+                                View
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl bg-card/95 backdrop-blur-xl border-border">
+                              <DialogTitle className="sr-only">{image.title}</DialogTitle>
+                              <DialogDescription className="sr-only">{image.description || "Gallery image"}</DialogDescription>
+                              <div className="relative">
+                                <img 
+                                  src={image.image_url} 
+                                  alt={image.title}
+                                  className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+                                />
+                                <div className="mt-4 space-y-2">
+                                  <h3 className="text-xl font-bold">{image.title}</h3>
+                                  <p className="text-muted-foreground">{image.description}</p>
+                                  {image.category && (
+                                    <Badge variant="outline" className="capitalize">
+                                      {image.category}
+                                    </Badge>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+
+                        {/* Category Badge */}
+                        {image.category && (
+                          <div className="absolute top-3 left-3">
+                            <Badge variant="secondary" className="bg-black/50 text-white capitalize">
+                              {image.category}
+                            </Badge>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Category Badge */}
-                      {image.category && (
-                        <div className="absolute top-3 left-3">
-                          <Badge variant="secondary" className="bg-black/50 text-white capitalize">
-                            {image.category}
-                          </Badge>
-                        </div>
-                      )}
-                    </div>
-
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-sm line-clamp-1 mb-1">{image.title}</h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{image.description}</p>
-                    </CardContent>
-                  </Card>
-                ))
-              }
-            </div>
+                      <CardContent className="p-4">
+                        <h3 className="font-semibold text-sm line-clamp-1 mb-1">{image.title}</h3>
+                        <p className="text-xs text-muted-foreground line-clamp-2">{image.description}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
