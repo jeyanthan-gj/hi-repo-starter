@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-mobile-store.jpg";
@@ -126,14 +126,13 @@ const Gallery = () => {
             <div className="text-center py-20">
               <p className="text-muted-foreground">Loading gallery...</p>
             </div>
+          ) : galleryImages.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-muted-foreground">No images found in gallery.</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {galleryImages.length === 0 ? (
-                <div className="col-span-full text-center py-20">
-                  <p className="text-muted-foreground">No images found in gallery.</p>
-                </div>
-              ) : (
-                galleryImages.map((image, index) => (
+              {galleryImages.map((image, index) => (
                   <Card key={image.id} className="card-3d reveal-up overflow-hidden group">
                     <div className="relative">
                       <img 
@@ -153,6 +152,8 @@ const Gallery = () => {
                             </Button>
                           </DialogTrigger>
                           <DialogContent className="max-w-4xl bg-card/95 backdrop-blur-xl border-border">
+                            <DialogTitle className="sr-only">{image.title}</DialogTitle>
+                            <DialogDescription className="sr-only">{image.description || "Gallery image"}</DialogDescription>
                             <div className="relative">
                               <img 
                                 src={image.image_url} 
@@ -189,7 +190,7 @@ const Gallery = () => {
                     </CardContent>
                   </Card>
                 ))
-              )}
+              }
             </div>
           )}
         </div>
