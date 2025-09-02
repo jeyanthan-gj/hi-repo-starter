@@ -122,64 +122,76 @@ const Gallery = () => {
       {/* Gallery Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {galleryImages.map((image, index) => (
-              <Card key={image.id} className="card-3d reveal-up overflow-hidden group">
-                <div className="relative">
-                  <img 
-                    src={image.image_url} 
-                    alt={image.title}
-                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Overlay Content */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button size="sm" className="btn-3d">
-                          <Eye className="w-4 h-4 mr-2" />
-                          View
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-4xl bg-card/95 backdrop-blur-xl border-border">
-                        <div className="relative">
-                          <img 
-                            src={image.image_url} 
-                            alt={image.title}
-                            className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
-                          />
-                          <div className="mt-4 space-y-2">
-                            <h3 className="text-xl font-bold">{image.title}</h3>
-                            <p className="text-muted-foreground">{image.description}</p>
-                            {image.category && (
-                              <Badge variant="outline" className="capitalize">
-                                {image.category}
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-
-                  {/* Category Badge */}
-                  {image.category && (
-                    <div className="absolute top-3 left-3">
-                      <Badge variant="secondary" className="bg-black/50 text-white capitalize">
-                        {image.category}
-                      </Badge>
-                    </div>
-                  )}
+          {loading ? (
+            <div className="text-center py-20">
+              <p className="text-muted-foreground">Loading gallery...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {galleryImages.length === 0 ? (
+                <div className="col-span-full text-center py-20">
+                  <p className="text-muted-foreground">No images found in gallery.</p>
                 </div>
+              ) : (
+                galleryImages.map((image, index) => (
+                  <Card key={image.id} className="card-3d reveal-up overflow-hidden group">
+                    <div className="relative">
+                      <img 
+                        src={image.image_url} 
+                        alt={image.title}
+                        className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      
+                      {/* Overlay Content */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button size="sm" className="btn-3d">
+                              <Eye className="w-4 h-4 mr-2" />
+                              View
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl bg-card/95 backdrop-blur-xl border-border">
+                            <div className="relative">
+                              <img 
+                                src={image.image_url} 
+                                alt={image.title}
+                                className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+                              />
+                              <div className="mt-4 space-y-2">
+                                <h3 className="text-xl font-bold">{image.title}</h3>
+                                <p className="text-muted-foreground">{image.description}</p>
+                                {image.category && (
+                                  <Badge variant="outline" className="capitalize">
+                                    {image.category}
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
 
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-sm line-clamp-1 mb-1">{image.title}</h3>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{image.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                      {/* Category Badge */}
+                      {image.category && (
+                        <div className="absolute top-3 left-3">
+                          <Badge variant="secondary" className="bg-black/50 text-white capitalize">
+                            {image.category}
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-sm line-clamp-1 mb-1">{image.title}</h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{image.description}</p>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </section>
 
