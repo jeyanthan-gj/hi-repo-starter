@@ -215,22 +215,6 @@ export const Gallery2DSlideshow: React.FC<Gallery2DSlideshowProps> = ({ images }
       >
         <ChevronRight className="h-7 w-7" />
       </Button>
-
-      {/* Image Indicators */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 flex gap-2">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => transitionToImage(index)}
-            disabled={isTransitioning}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentIndex 
-                ? 'bg-primary scale-125 shadow-lg' 
-                : 'bg-white/40 hover:bg-white/70 hover:scale-110'
-            }`}
-          />
-        ))}
-      </div>
     </div>
   );
 };
