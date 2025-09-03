@@ -17,16 +17,20 @@ interface Gallery2DSlideshowProps {
 
 export const Gallery2DSlideshow: React.FC<Gallery2DSlideshowProps> = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isPlaying && images.length > 0) {
+    if (isPlaying && images.length > 1) {
       interval = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % images.length);
-      }, 4000);
+      }, 3000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [isPlaying, images.length]);
 
   const handlePrevious = () => {
@@ -79,7 +83,7 @@ export const Gallery2DSlideshow: React.FC<Gallery2DSlideshowProps> = ({ images }
       </div>
 
       {/* Navigation Controls */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-6 py-3">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-6 py-3">
         <Button
           variant="ghost"
           size="sm"
@@ -114,28 +118,6 @@ export const Gallery2DSlideshow: React.FC<Gallery2DSlideshowProps> = ({ images }
         </span>
       </div>
 
-      {/* Thumbnail Strip */}
-      <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-4">
-        <div className="flex gap-2 overflow-x-auto">
-          {images.map((image, index) => (
-            <button
-              key={image.id}
-              onClick={() => setCurrentIndex(index)}
-              className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
-                currentIndex === index 
-                  ? 'border-primary scale-110' 
-                  : 'border-white/30 hover:border-white/60'
-              }`}
-            >
-              <img 
-                src={image.image_url}
-                alt={image.title}
-                className="w-full h-full object-cover"
-              />
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Navigation Arrows */}
       <Button
