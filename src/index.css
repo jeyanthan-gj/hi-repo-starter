@@ -163,4 +163,10 @@
       transform: perspective(1000px) rotateX(2deg) rotateY(2deg) translateZ(10px);
     }
   }
+
+  /* Gallery Slideshow Progress Bar Animation */
+  @keyframes progress-bar {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
 }
