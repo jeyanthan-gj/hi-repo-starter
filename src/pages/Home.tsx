@@ -211,7 +211,7 @@ const Home = () => {
                   <h3 className="text-xl font-bold">{service.title}</h3>
                   <p className="text-muted-foreground">{service.description}</p>
                   <Button asChild variant="ghost" className="p-0 h-auto text-primary">
-                    <Link to={service.title === "Accessories" ? "/accessories" : "/repair-services"}>
+                    <Link to={service.title === "Accessories" ? "/accessories" : "/services"}>
                       Read More <ArrowRight className="ml-1 w-4 h-4" />
                     </Link>
                   </Button>

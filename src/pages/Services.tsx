@@ -249,7 +249,7 @@ const Services = () => {
                   asChild
                   className="w-full btn-3d"
                 >
-                  <Link to="/repair-services">
+                  <Link to="/services">
                     Book Service
                   </Link>
                 </Button>
