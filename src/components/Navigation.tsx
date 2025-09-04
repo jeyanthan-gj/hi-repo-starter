@@ -38,7 +38,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 hover-tilt">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
               <img 
                 src="/lovable-uploads/13e68c24-915d-41d3-81c6-c97854197081.png" 
                 alt="Jayam Mobiles Logo"
