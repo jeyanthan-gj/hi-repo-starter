@@ -103,7 +103,7 @@ const Home = () => {
             <div className="reveal-up">
               <img 
                 src="/lovable-uploads/c44d59bb-0903-447d-9560-7104bd229f4d.png" 
-                alt="About Jayam Mobile"
+                alt="About Jayam Mobiles"
                 className="rounded-2xl shadow-2xl hover-tilt"
               />
             </div>

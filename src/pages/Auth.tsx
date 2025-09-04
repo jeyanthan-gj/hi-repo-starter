@@ -51,7 +51,7 @@ const Auth = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <Smartphone className="h-10 w-10 text-primary mr-2" />
-            <h1 className="text-3xl font-bold text-foreground">Jayam Mobile</h1>
+            <h1 className="text-3xl font-bold text-foreground">Jayam Mobiles</h1>
           </div>
           <p className="text-muted-foreground">Access your admin dashboard</p>
         </div>

@@ -69,7 +69,7 @@ const Gallery = () => {
           },
           {
             id: 'about-1',
-            title: "Jayam Mobile Store Interior", 
+            title: "Jayam Mobiles Store Interior",
             description: "Welcome to our friendly and professional environment",
             image_url: aboutImage,
             category: "showroom"
@@ -90,7 +90,7 @@ const Gallery = () => {
         },
         {
           id: 'about-1',
-          title: "Jayam Mobile Store Interior",
+          title: "Jayam Mobiles Store Interior",
           description: "Welcome to our friendly and professional environment", 
           image_url: aboutImage,
           category: "showroom"
@@ -110,7 +110,7 @@ const Gallery = () => {
           <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-glow">Gallery</h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Take a visual tour of our showroom, products, and services. See why Jayam Mobile is the preferred choice in Anjugramam.
+              Take a visual tour of our showroom, products, and services. See why Jayam Mobiles is the preferred choice in Anjugramam.
             </p>
           </div>
         </div>

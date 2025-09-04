@@ -14,7 +14,7 @@ const Footer = () => {
                 JM
               </div>
               <div>
-                <div className="font-bold text-lg text-glow">Jayam Mobile</div>
+                <div className="font-bold text-lg text-glow">Jayam Mobiles</div>
                 <div className="text-sm text-muted-foreground">Since 2013</div>
               </div>
             </div>

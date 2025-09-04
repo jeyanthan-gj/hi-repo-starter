@@ -43,7 +43,7 @@ const About = () => {
             <div className="reveal-up">
               <img 
                 src={aboutImage} 
-                alt="Jayam Mobile Store"
+                alt="Jayam Mobiles Store"
                 className="rounded-2xl shadow-2xl hover-tilt"
               />
             </div>

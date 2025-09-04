@@ -41,12 +41,12 @@ const Navigation = () => {
             <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
               <img 
                 src="/lovable-uploads/13e68c24-915d-41d3-81c6-c97854197081.png" 
-                alt="Jayam Mobile Logo" 
+                alt="Jayam Mobiles Logo"
                 className="w-full h-full object-contain"
               />
             </div>
             <div className="hidden sm:block">
-              <div className="text-xl font-bold text-glow">Jayam Mobile</div>
+              <div className="text-xl font-bold text-glow">Jayam Mobiles</div>
               <div className="text-xs text-muted-foreground">Your Trusted Mobile Destination</div>
             </div>
           </Link>
@@ -120,12 +120,12 @@ const Navigation = () => {
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
                     <img 
                       src="/lovable-uploads/13e68c24-915d-41d3-81c6-c97854197081.png" 
-                      alt="Jayam Mobile Logo" 
+                      alt="Jayam Mobiles Logo" 
                       className="w-full h-full object-contain"
                     />
                   </div>
                   <div>
-                    <div className="font-bold">Jayam Mobile</div>
+                    <div className="font-bold">Jayam Mobiles</div>
                     <div className="text-xs text-muted-foreground">Mobile Store</div>
                   </div>
                 </div>
