@@ -125,46 +125,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Gallery Preview */}
-      <section className="py-20 bg-gradient-to-b from-background to-card/50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12 reveal-up">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow">Our Gallery</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Check out our latest mobile products and accessories.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {[
-              { image: heroImage, title: "Latest Smartphones", subtitle: "Premium devices" },
-              { image: mobileRepairImage, title: "Expert Repairs", subtitle: "Professional service" },
-              { image: mobileAccessoriesImage, title: "Quality Accessories", subtitle: "Complete protection" },
-            ].map((item, index) => (
-              <Card key={index} className="card-3d reveal-up overflow-hidden">
-                <div className="relative h-64">
-                  <img 
-                    src={item.image} 
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="font-bold text-lg">{item.title}</h3>
-                    <p className="text-sm opacity-90">{item.subtitle}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center reveal-up">
-            <Button asChild size="lg" variant="outline" className="hover-tilt">
-              <Link to="/gallery">See More</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
 
       {/* Services Section */}
       <section className="py-20">
