@@ -14,6 +14,7 @@ import Brands from "./pages/Brands";
 import ModelDetail from "./pages/ModelDetail";
 import Accessories from "./pages/Accessories";
 import Services from "./pages/Services";
+import Consultation from "./pages/Consultation";
 
 import Gallery from "./pages/Gallery";
 import Auth from "./pages/Auth";
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/model/:id" element={<Layout><ModelDetail /></Layout>} />
             <Route path="/accessories" element={<Layout><Accessories /></Layout>} />
             <Route path="/services" element={<Layout><Services /></Layout>} />
+            <Route path="/consultation" element={<Layout><Consultation /></Layout>} />
             <Route path="/gallery" element={<Layout><Gallery /></Layout>} />
             
             {/* Protected admin routes */}
