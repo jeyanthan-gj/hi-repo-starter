@@ -167,16 +167,6 @@ const Consultation = () => {
                   <Input type="email" placeholder="Your email" className="bg-background/50" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Consultation Type</label>
-                  <select className="w-full p-2 rounded-md border bg-background/50">
-                    <option>Device Selection</option>
-                    <option>Protection Planning</option>
-                    <option>Upgrade Strategy</option>
-                    <option>Business Solutions</option>
-                    <option>General Consultation</option>
-                  </select>
-                </div>
-                <div>
                   <label className="block text-sm font-medium mb-2">Tell us about your needs</label>
                   <Textarea 
                     placeholder="Describe what you're looking for..."
@@ -184,8 +174,8 @@ const Consultation = () => {
                   />
                 </div>
                 <Button className="btn-3d w-full">
-                  <Clock className="mr-2 w-4 h-4" />
-                  Schedule Free Consultation
+                  <MessageCircle className="mr-2 w-4 h-4" />
+                  Message us on WhatsApp
                 </Button>
               </CardContent>
             </Card>
