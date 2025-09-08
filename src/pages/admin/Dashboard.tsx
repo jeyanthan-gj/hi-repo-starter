@@ -11,11 +11,14 @@ import {
   BarChart3,
   ShoppingBag,
   Headphones,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Loader2
 } from 'lucide-react';
+import { useAdminStats } from '@/hooks/useAdminStats';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
+  const { data: stats, isLoading, error } = useAdminStats();
 
   const dashboardCards = [
     {
@@ -62,7 +65,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
           <Card className="card-3d border-border/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-foreground">
@@ -71,7 +74,9 @@ const AdminDashboard = () => {
               <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">4</div>
+              <div className="text-2xl font-bold text-foreground">
+                {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.totalBrands || 0}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Active mobile brands
               </p>
@@ -86,7 +91,9 @@ const AdminDashboard = () => {
               <Smartphone className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">12</div>
+              <div className="text-2xl font-bold text-foreground">
+                {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.totalModels || 0}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Available mobile models
               </p>
@@ -101,7 +108,9 @@ const AdminDashboard = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">1</div>
+              <div className="text-2xl font-bold text-foreground">
+                {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.totalUsers || 0}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Registered users
               </p>
@@ -111,14 +120,50 @@ const AdminDashboard = () => {
           <Card className="card-3d border-border/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-foreground">
-                Revenue
+                Accessory Products
               </CardTitle>
               <ShoppingBag className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">₹0</div>
+              <div className="text-2xl font-bold text-foreground">
+                {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.totalAccessoryProducts || 0}
+              </div>
               <p className="text-xs text-muted-foreground">
-                Total sales
+                Available products
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="card-3d border-border/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-foreground">
+                Categories
+              </CardTitle>
+              <Headphones className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">
+                {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.totalAccessoryCategories || 0}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Accessory categories
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="card-3d border-border/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-foreground">
+                Gallery Photos
+              </CardTitle>
+              <ImageIcon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">
+                {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.totalGalleryPhotos || 0}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Photos uploaded
               </p>
             </CardContent>
           </Card>
