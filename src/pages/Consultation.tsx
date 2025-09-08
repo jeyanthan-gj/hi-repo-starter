@@ -62,7 +62,7 @@ const Consultation = () => {
   ];
 
   const benefits = [
-    "Free 30-minute consultation",
+    "Professional consultation service",
     "Expert advice from certified technicians",
     "Personalized recommendations",
     "Budget-friendly options",
