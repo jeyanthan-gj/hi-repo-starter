@@ -201,12 +201,16 @@ const ModelDetail = () => {
                 Contact for Price
               </Button>
               <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" size="sm">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call Now
+                <Button variant="outline" size="sm" asChild>
+                  <a href="tel:+918667200485">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Now
+                  </a>
                 </Button>
-                <Button variant="outline" size="sm">
-                  WhatsApp
+                <Button variant="outline" size="sm" asChild>
+                  <a href="https://wa.me/918667200485" target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
                 </Button>
               </div>
             </div>

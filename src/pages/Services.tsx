@@ -360,9 +360,11 @@ const Services = () => {
                   </div>
                 </div>
 
-                <Button type="submit" size="lg" className="btn-3d w-full">
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Send via WhatsApp
+                <Button type="button" size="lg" className="btn-3d w-full" asChild>
+                  <a href="https://wa.me/918667200485" target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    Send via WhatsApp
+                  </a>
                 </Button>
               </form>
             </CardContent>

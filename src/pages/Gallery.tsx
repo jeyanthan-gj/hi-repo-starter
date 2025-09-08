@@ -144,7 +144,7 @@ const Gallery = () => {
               </p>
               <div className="text-muted-foreground space-y-2">
                 <div className="font-medium">📍 North Bazaar, Anjugramam, Kanyakumari, Tamil Nadu</div>
-                <div>📞 +91 123 456 7890</div>
+                <div>📞 +918667200485</div>
                 <div>📧 contact@jayammobile.com</div>
               </div>
               <Button size="lg" className="btn-3d">

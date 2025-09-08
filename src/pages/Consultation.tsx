@@ -173,9 +173,11 @@ const Consultation = () => {
                     className="bg-background/50 min-h-[100px]"
                   />
                 </div>
-                <Button className="btn-3d w-full">
-                  <MessageCircle className="mr-2 w-4 h-4" />
-                  Message us on WhatsApp
+                <Button className="btn-3d w-full" asChild>
+                  <a href="https://wa.me/918667200485" target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="mr-2 w-4 h-4" />
+                    Message us on WhatsApp
+                  </a>
                 </Button>
               </CardContent>
             </Card>
@@ -192,9 +194,11 @@ const Consultation = () => {
               Contact us today to schedule your free consultation and discover the perfect mobile solution for you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="btn-3d">
-                <MessageCircle className="mr-2 w-5 h-5" />
-                Call Now: +91 9876543210
+              <Button size="lg" className="btn-3d" asChild>
+                <a href="tel:+918667200485">
+                  <MessageCircle className="mr-2 w-5 h-5" />
+                  Call Now: +918667200485
+                </a>
               </Button>
               <Button size="lg" variant="outline" className="hover-tilt">
                 <ArrowRight className="mr-2 w-5 h-5" />
