@@ -4,12 +4,28 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, ArrowLeft, Phone, Shield, Truck, CreditCard } from "lucide-react";
+import { Star, ArrowLeft, Phone, Shield, Truck, CreditCard, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ModelDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleContactAction = (action: 'call' | 'whatsapp') => {
+    if (!user) {
+      toast.error('Please login to contact seller');
+      navigate('/auth');
+      return;
+    }
+
+    if (action === 'call') {
+      window.location.href = 'tel:+918667200485';
+    } else {
+      window.open('https://wa.me/918667200485', '_blank');
+    }
+  };
 
   // Fetch model details with brand information
   const { data: model, isLoading, error } = useQuery({
@@ -197,22 +213,30 @@ const ModelDetail = () => {
 
             {/* Call to Action */}
             <div className="space-y-4 pt-6">
-              <Button size="lg" className="w-full text-lg">
-                Contact for Price
-              </Button>
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" size="sm" asChild>
-                  <a href="tel:+918667200485">
-                    <Phone className="w-4 h-4 mr-2" />
-                    Call Now
-                  </a>
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  size="lg" 
+                  onClick={() => handleContactAction('call')}
+                  className="text-lg"
+                >
+                  <Phone className="w-5 h-5 mr-2" />
+                  Call Now
                 </Button>
-                <Button variant="outline" size="sm" asChild>
-                  <a href="https://wa.me/918667200485" target="_blank" rel="noopener noreferrer">
-                    WhatsApp
-                  </a>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  onClick={() => handleContactAction('whatsapp')}
+                  className="text-lg"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  WhatsApp
                 </Button>
               </div>
+              {!user && (
+                <p className="text-sm text-muted-foreground text-center">
+                  Please login to contact the seller
+                </p>
+              )}
             </div>
 
             {/* Trust Badges */}
