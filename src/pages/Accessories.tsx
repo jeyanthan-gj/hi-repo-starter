@@ -3,10 +3,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, ShoppingCart, ArrowLeft, Shield, Headphones, Cable, Smartphone } from "lucide-react";
+import { Star, ArrowLeft, Shield, Headphones, Cable, Smartphone, Phone, MessageCircle } from "lucide-react";
 import mobileAccessoriesImage from "@/assets/mobile-accessories.jpg";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Category {
   id: string;
@@ -40,6 +41,7 @@ interface Product {
 const Accessories = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   
   const categoryId = searchParams.get('category');
   const subcategoryId = searchParams.get('subcategory');
@@ -52,6 +54,20 @@ const Accessories = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState<Subcategory | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const handleContactAction = (action: 'call' | 'whatsapp') => {
+    if (!user) {
+      toast.error('Please login to contact seller');
+      navigate('/auth');
+      return;
+    }
+
+    if (action === 'call') {
+      window.location.href = 'tel:+918667200485';
+    } else {
+      window.open('https://wa.me/918667200485', '_blank');
+    }
+  };
 
   useEffect(() => {
     if (productId) {
@@ -77,11 +93,7 @@ const Accessories = () => {
       setCategories(data || []);
     } catch (error) {
       console.error('Error fetching categories:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load categories",
-        variant: "destructive",
-      });
+      toast.error("Failed to load categories");
     } finally {
       setLoading(false);
     }
@@ -125,11 +137,7 @@ const Accessories = () => {
       }
     } catch (error) {
       console.error('Error fetching category data:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load category data",
-        variant: "destructive",
-      });
+      toast.error("Failed to load category data");
     } finally {
       setLoading(false);
     }
@@ -161,11 +169,7 @@ const Accessories = () => {
       setProducts(productsData || []);
     } catch (error) {
       console.error('Error fetching subcategory products:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load products",
-        variant: "destructive",
-      });
+      toast.error("Failed to load products");
     } finally {
       setLoading(false);
     }
@@ -193,11 +197,7 @@ const Accessories = () => {
       }
     } catch (error) {
       console.error('Error fetching product details:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load product details",
-        variant: "destructive",
-      });
+      toast.error("Failed to load product details");
     } finally {
       setLoading(false);
     }
@@ -321,10 +321,32 @@ const Accessories = () => {
                 </div>
               )}
 
-              <Button size="lg" className="w-full btn-3d">
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Add to Cart
-              </Button>
+              <div className="space-y-4 pt-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <Button 
+                    size="lg" 
+                    onClick={() => handleContactAction('call')}
+                    className="text-lg"
+                  >
+                    <Phone className="w-5 h-5 mr-2" />
+                    Call Now
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    onClick={() => handleContactAction('whatsapp')}
+                    className="text-lg"
+                  >
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    WhatsApp
+                  </Button>
+                </div>
+                {!user && (
+                  <p className="text-sm text-muted-foreground text-center">
+                    Please login to contact the seller
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -530,7 +552,6 @@ const ProductCard = ({ product, onClick }: { product: Product; onClick: () => vo
         </div>
 
         <Button size="sm" className="btn-3d w-full" onClick={(e) => { e.stopPropagation(); onClick(); }}>
-          <ShoppingCart className="w-3 h-3 mr-1" />
           View Details
         </Button>
       </CardContent>
