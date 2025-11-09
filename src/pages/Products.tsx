@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Smartphone, Headphones, Wrench } from "lucide-react";
-import heroImage from "@/assets/hero-mobile-store.jpg";
-import mobileAccessoriesImage from "@/assets/mobile-accessories.jpg";
-import mobileRepairImage from "@/assets/mobile-repair.jpg";
+import mobilesImage from "@/assets/products-mobiles.jpg";
+import accessoriesImage from "@/assets/products-accessories.jpg";
+import servicesImage from "@/assets/products-services.jpg";
 
 const Products = () => {
   useEffect(() => {
@@ -29,7 +29,7 @@ const Products = () => {
     {
       title: "Mobiles",
       description: "Explore our wide range of smartphones from top brands",
-      image: heroImage,
+      image: mobilesImage,
       icon: Smartphone,
       link: "/brands",
       color: "from-blue-500 to-purple-600"
@@ -37,7 +37,7 @@ const Products = () => {
     {
       title: "Accessories", 
       description: "Complete your mobile experience with quality accessories",
-      image: mobileAccessoriesImage,
+      image: accessoriesImage,
       icon: Headphones,
       link: "/accessories",
       color: "from-green-500 to-teal-600"
@@ -45,7 +45,7 @@ const Products = () => {
     {
       title: "Services",
       description: "Professional repair and maintenance services",
-      image: mobileRepairImage,
+      image: servicesImage,
       icon: Wrench,
       link: "/services",
       color: "from-orange-500 to-red-600"
